@@ -6,5 +6,8 @@ type BadgeProps = {
 };
 
 export default function Badge({ label, status }: BadgeProps) {
-  return <span data-status={status}>{label}</span>;
+  const statusClasse = status ? `badge--${status}` : "";
+  const classes = ["badge", statusClasse].filter(Boolean).join(" ");
+
+  return <span className={classes}>{label}</span>;
 }
