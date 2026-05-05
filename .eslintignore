@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+dist
+coverage
+*.log
+next-env.d.ts
+*.config.js
+*.config.cjs
+
+# Non-JS sources
+**/*.json
+**/*.jsonc
+**/*.md
