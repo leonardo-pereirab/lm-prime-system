@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Header from "@/components/layout/Header";
 import Sidebar from "@/components/layout/Sidebar";
 
@@ -8,12 +8,30 @@ type AdminLayoutProps = {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
-    <div style={{ display: "flex" }}>
+    <div style={estilos.layout}>
       <Sidebar />
-      <div style={{ flex: 1 }}>
+      <div style={estilos.conteudo}>
         <Header />
-        <main>{children}</main>
+        <main style={estilos.main}>{children}</main>
       </div>
     </div>
   );
 }
+
+const estilos: Record<string, CSSProperties> = {
+  layout: {
+    display: "flex",
+    minHeight: "100vh",
+  },
+  conteudo: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    minWidth: 0,
+    backgroundColor: "#f5f5f5",
+  },
+  main: {
+    flex: 1,
+    overflow: "auto",
+  },
+};
