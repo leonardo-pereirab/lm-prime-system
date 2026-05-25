@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import LoginForm from "@/components/forms/LoginForm";
 
 export const metadata = {
@@ -7,47 +6,18 @@ export const metadata = {
 
 export default function LoginPage() {
   return (
-    <main style={estilos.pagina}>
-      <div style={estilos.cartao}>
-        <div style={estilos.cabecalho}>
-          <h1 style={estilos.titulo}>LM Prime System</h1>
-          <p style={estilos.subtitulo}>Faca login para acessar o sistema</p>
+    <main className="flex min-h-screen items-center justify-center p-4">
+      <div className="w-full max-w-sm rounded-lg border border-neutral-200 bg-white p-8 shadow-sm">
+        <div className="mb-8 text-center">
+          <h1 className="mb-1 text-2xl font-semibold text-primary-700">
+            LM Prime System
+          </h1>
+          <p className="text-sm text-neutral-500">
+            Faca login para acessar o sistema
+          </p>
         </div>
         <LoginForm />
       </div>
     </main>
   );
 }
-
-const estilos: Record<string, CSSProperties> = {
-  pagina: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#f3f4f6",
-    padding: "1rem",
-  },
-  cartao: {
-    backgroundColor: "#ffffff",
-    borderRadius: "1rem",
-    boxShadow: "0 4px 24px rgba(0,0,0,0.10)",
-    padding: "2.5rem 2rem",
-    width: "100%",
-    maxWidth: "400px",
-  },
-  cabecalho: {
-    textAlign: "center",
-    marginBottom: "2rem",
-  },
-  titulo: {
-    fontSize: "1.5rem",
-    fontWeight: "700",
-    color: "#1d4ed8",
-    marginBottom: "0.375rem",
-  },
-  subtitulo: {
-    fontSize: "0.9rem",
-    color: "#6b7280",
-  },
-};

@@ -1,30 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { requestJson } from "@/hooks/http";
 
 export function useAuth() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  async function login(email: string, senha: string) {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/auth", {
+  const loginMutation = useMutation({
+    mutationFn: ({ email, senha }: { email: string; senha: string }) =>
+      requestJson("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, senha }),
-      });
-      if (!res.ok) throw new Error("Credenciais invalidas");
+      }),
+    onSuccess: () => {
       router.push("/dashboard");
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Erro inesperado");
-    } finally {
-      setLoading(false);
-    }
-  }
+    },
+  });
 
-  return { login, loading, error };
+  return {
+    login: (email: string, senha: string) =>
+      loginMutation.mutate({ email, senha }),
+    loading: loginMutation.isPending,
+    error:
+      loginMutation.error instanceof Error ? loginMutation.error.message : null,
+  };
 }

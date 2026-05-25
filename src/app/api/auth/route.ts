@@ -1,90 +1,64 @@
-import { NextResponse, type NextRequest } from "next/server";
-import { Prisma } from "@prisma/client";
-import prisma from "@/lib/prisma";
-import { gerarToken, verificarSenha } from "@/lib/auth";
-
-type LoginPayload = {
-  email?: string;
-  senha?: string;
-};
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { fail } from "@/lib/api-response";
+import { criarSessao } from "@/lib/auth";
+import { verificarRateLimit } from "@/lib/rate-limit";
+import { loginInputSchema } from "@/schemas/auth";
+import { usuarioService } from "@/services/usuarioService";
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get("x-forwarded-for") ?? "local";
+  const limite = verificarRateLimit(`login:${ip}`);
+
+  if (!limite.permitido) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: {
+          code: "RATE_LIMIT",
+          message: "Muitas tentativas de login. Tente novamente em instantes.",
+        },
+      },
+      { status: 429 },
+    );
+  }
+
   try {
-    const { email, senha } = (await request.json()) as LoginPayload;
+    const body = await request.json();
+    const input = loginInputSchema.parse(body);
 
-    if (!email || !senha) {
-      return NextResponse.json(
-        { erro: "E-mail e senha sao obrigatorios." },
-        { status: 400 },
-      );
-    }
-
-    const usuario = await prisma.usuario.findUnique({ where: { email } });
-
-    if (!usuario || !usuario.ativo) {
-      return NextResponse.json(
-        { erro: "Credenciais invalidas." },
-        { status: 401 },
-      );
-    }
-
-    const senhaValida = await verificarSenha(senha, usuario.senha);
-    if (!senhaValida) {
-      return NextResponse.json(
-        { erro: "Credenciais invalidas." },
-        { status: 401 },
-      );
-    }
-
-    const token = await gerarToken({
-      id: usuario.id,
-      email: usuario.email,
-      perfil: usuario.perfil,
-    });
+    const usuario = await usuarioService.autenticar(input.email, input.senha);
+    const { token, cookieOptions } = await criarSessao(usuario);
 
     const resposta = NextResponse.json({
-      mensagem: "Login realizado com sucesso.",
+      success: true,
+      data: {
+        autenticado: true,
+        usuario,
+      },
     });
-    resposta.cookies.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
+
+    resposta.cookies.set("token", token, cookieOptions);
 
     return resposta;
-  } catch (erro) {
-    console.error("[POST /api/auth]", erro);
-
-    if (
-      erro instanceof Prisma.PrismaClientInitializationError ||
-      erro instanceof Prisma.PrismaClientRustPanicError
-    ) {
-      return NextResponse.json(
-        { erro: "Servico indisponivel. Tente novamente em instantes." },
-        { status: 503 },
-      );
-    }
-
-    if (erro instanceof SyntaxError) {
-      return NextResponse.json(
-        { erro: "Requisicao invalida." },
-        { status: 400 },
-      );
-    }
-
-    return NextResponse.json(
-      { erro: "Erro interno do servidor." },
-      { status: 500 },
-    );
+  } catch (error) {
+    return fail(error);
   }
 }
 
 export async function DELETE() {
   const resposta = NextResponse.json({
-    mensagem: "Logout realizado com sucesso.",
+    success: true,
+    data: { logout: true },
   });
-  resposta.cookies.set("token", "", { httpOnly: true, maxAge: 0, path: "/" });
+
+  resposta.cookies.set("token", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0,
+  });
+
   return resposta;
 }

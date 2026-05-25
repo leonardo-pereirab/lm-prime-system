@@ -1,9 +1,16 @@
-type PageProps = { params: { id: string } };
+import ParceiroDetalhe from "@/app/(admin)/cadastros/parceiros/_components/ParceiroDetalhe";
 
-export default function ParceiroDetalhePage({ params }: PageProps) {
-  return (
-    <div>
-      <h1>Parceiro #{params.id}</h1>
-    </div>
-  );
+type PageProps = {
+  params: Promise<{ id: string }>;
+  searchParams?: Promise<{ editar?: string }>;
+};
+
+export default async function ParceiroDetalhePage({
+  params,
+  searchParams,
+}: PageProps) {
+  const { id } = await params;
+  const query = searchParams ? await searchParams : undefined;
+
+  return <ParceiroDetalhe id={id} iniciarEmEdicao={query?.editar === "1"} />;
 }

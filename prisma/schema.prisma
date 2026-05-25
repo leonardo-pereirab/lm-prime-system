@@ -44,6 +44,25 @@ enum FormaPagamento {
   BOLETO
 }
 
+enum TipoServico {
+  VIAGEM
+  EXCURSAO
+  PASSEIO
+  FEIRA
+  CONVENCAO
+  CASAMENTO
+  TRANSFERE
+  OUTRO
+}
+
+enum TipoVeiculo {
+  CARRO_PASSEIO
+  VAN
+  MICRO_ONIBUS
+  ONIBUS
+  OUTRO
+}
+
 // ─────────────────────────────────────────
 // USUÁRIOS DO SISTEMA
 // ─────────────────────────────────────────
@@ -58,7 +77,9 @@ model Usuario {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
-  atendimentos Atendimento[]
+  atendimentosCriados    Atendimento[] @relation("AtendimentoCriadoPor")
+  atendimentosCancelados Atendimento[] @relation("AtendimentoCanceladoPor")
+  contratosGerados       Contrato[]
 
   @@map("usuarios")
 }
@@ -73,6 +94,7 @@ model Cliente {
   cpfCnpj     String   @unique
   rgIe        String?
   telefone    String
+  telefoneSec String?
   email       String?
   cep         String?
   logradouro  String?
@@ -80,13 +102,13 @@ model Cliente {
   complemento String?
   bairro      String?
   cidade      String?
-  uf          String?
+  estado      String?
   ativo       Boolean  @default(true)
+  observacoes String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   atendimentos Atendimento[]
-  reservas     Reserva[]
 
   @@map("clientes")
 }
@@ -96,51 +118,60 @@ model Cliente {
 // ─────────────────────────────────────────
 
 model Motorista {
-  id           String    @id @default(cuid())
+  id           String   @id @default(cuid())
   nome         String
-  cpf          String    @unique
+  cpf          String   @unique
   telefone     String
   cnh          String
-  categoriaCnh String?
-  cnhValidade  DateTime?
-  ativo        Boolean   @default(true)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  cnhCategoria String
+  cnhValidade  DateTime
+  ativo        Boolean  @default(true)
+  observacoes  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  escalas Escala[]
+  escalas EscalaMotorista[]
 
   @@map("motoristas")
 }
 
 model Veiculo {
-  id         String   @id @default(cuid())
-  placa      String   @unique
-  modelo     String
-  marca      String
-  ano        Int
-  capacidade Int
-  tipo       String
-  ativo      Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String      @id @default(cuid())
+  placa       String      @unique
+  modelo      String
+  marca       String
+  ano         Int
+  capacidade  Int
+  tipo        TipoVeiculo
+  ativo       Boolean     @default(true)
+  observacoes String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
-  escalas Escala[]
+  escalas EscalaVeiculo[]
 
   @@map("veiculos")
 }
 
 model Parceiro {
   id          String   @id @default(cuid())
-  razaoSocial String
-  cnpj        String?  @unique
+  nome        String
+  cnpj        String   @unique
   telefone    String
   email       String?
-  contato     String?
+  cep         String?
+  logradouro  String?
+  numero      String?
+  complemento String?
+  bairro      String?
+  cidade      String?
+  estado      String?
   ativo       Boolean  @default(true)
+  observacoes String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  escalas Escala[]
+  escalas EscalaParceiro[]
 
   @@map("parceiros")
 }
@@ -151,21 +182,16 @@ model Parceiro {
 
 model Atendimento {
   id     String            @id @default(cuid())
-  codigo String            @unique // ex: AT-2024-0001
+  codigo String?           @unique // valor gerado em fase posterior
   status StatusAtendimento @default(EM_SOLICITACAO)
 
   // Dados da Solicitação (RF13)
-  dataContato    DateTime
-  localSaida     String
-  horaSaida      DateTime
-  destino        String
-  temRetorno     Boolean   @default(false)
-  localRetorno   String?
-  horaRetorno    DateTime?
-  destinoRetorno String?
-  qtdPassageiros Int
-  tipoServico    String
-  emiteNf        Boolean   @default(false)
+  dataContato       DateTime
+  dataServico       DateTime?
+  qtdPassageiros    Int
+  tipoServico       TipoServico
+  precisaNotaFiscal Boolean     @default(false)
+  trajeto           Json
 
   // Lead ou Cliente (clienteId nullable até a etapa de Reserva — RN05)
   clienteId    String?
@@ -173,24 +199,28 @@ model Atendimento {
   leadTelefone String?
 
   // Operação
-  usuarioId   String
-  encerradoEm DateTime?
-  observacoes String?
+  criadoPor                  String
+  statusAnteriorCancelamento StatusAtendimento?
+  canceladoEm                DateTime?
+  canceladoPor               String?
+  observacoes                String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cliente   Cliente?   @relation(fields: [clienteId], references: [id])
-  usuario   Usuario    @relation(fields: [usuarioId], references: [id])
-  orcamento Orcamento?
-  reserva   Reserva?
-  escala    Escala?
-  contrato  Contrato?
+  cliente             Cliente?   @relation(fields: [clienteId], references: [id])
+  criadoPorUsuario    Usuario    @relation("AtendimentoCriadoPor", fields: [criadoPor], references: [id])
+  canceladoPorUsuario Usuario?   @relation("AtendimentoCanceladoPor", fields: [canceladoPor], references: [id])
+  orcamento           Orcamento?
+  reserva             Reserva?
+  escala              Escala?
+  contratos           Contrato[]
 
   @@index([status])
+  @@index([dataServico])
   @@index([clienteId])
-  @@index([usuarioId])
-  @@index([dataContato])
+  @@index([criadoPor])
+  @@index([canceladoPor])
   @@map("atendimentos")
 }
 
@@ -199,18 +229,17 @@ model Atendimento {
 // ─────────────────────────────────────────
 
 model Orcamento {
-  id             String         @id @default(cuid())
-  atendimentoId  String         @unique
-  valorTotal     Decimal        @db.Decimal(10, 2)
-  formaPagamento FormaPagamento
-  vencimento     DateTime?
+  id                String         @id @default(cuid())
+  atendimentoId     String         @unique
+  valorTotal        Decimal        @db.Decimal(10, 2)
+  formaPagamento    FormaPagamento
+  dataVencimento    DateTime?
   // validoAte = createdAt + 7 dias corridos (RN03); usado para cancelamento automático
-  validoAte      DateTime
-  tiposVeiculos  String?
-  qtdVeiculos    Int            @default(1)
-  observacoes    String?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  validoAte         DateTime
+  veiculosPrevistos Json
+  observacoes       String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
 
   atendimento Atendimento @relation(fields: [atendimentoId], references: [id])
 
@@ -223,19 +252,15 @@ model Orcamento {
 // ─────────────────────────────────────────
 
 model Reserva {
-  id              String   @id @default(cuid())
-  atendimentoId   String   @unique
-  // clienteId obrigatório aqui: lead deve ter sido convertido em cliente (RN05)
-  clienteId       String
-  dataConfirmacao DateTime @default(now())
-  observacoes     String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id            String   @id @default(cuid())
+  atendimentoId String   @unique
+  confirmadaEm  DateTime @default(now())
+  observacoes   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   atendimento Atendimento @relation(fields: [atendimentoId], references: [id])
-  cliente     Cliente     @relation(fields: [clienteId], references: [id])
 
-  @@index([clienteId])
   @@map("reservas")
 }
 
@@ -246,20 +271,55 @@ model Reserva {
 model Escala {
   id            String   @id @default(cuid())
   atendimentoId String   @unique
-  // Pelo menos motorista OU parceiro deve ser informado
-  motoristaId   String?
-  veiculoId     String?
-  parceiroId    String?
   observacoes   String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  atendimento Atendimento @relation(fields: [atendimentoId], references: [id])
-  motorista   Motorista?  @relation(fields: [motoristaId], references: [id])
-  veiculo     Veiculo?    @relation(fields: [veiculoId], references: [id])
-  parceiro    Parceiro?   @relation(fields: [parceiroId], references: [id])
+  atendimento Atendimento       @relation(fields: [atendimentoId], references: [id])
+  motoristas  EscalaMotorista[]
+  veiculos    EscalaVeiculo[]
+  parceiros   EscalaParceiro[]
 
   @@map("escala")
+}
+
+model EscalaMotorista {
+  escalaId    String
+  motoristaId String
+  observacoes String?
+
+  escala    Escala    @relation(fields: [escalaId], references: [id])
+  motorista Motorista @relation(fields: [motoristaId], references: [id])
+
+  @@id([escalaId, motoristaId])
+  @@map("escala_motoristas")
+}
+
+model EscalaVeiculo {
+  escalaId    String
+  veiculoId   String
+  observacoes String?
+
+  escala  Escala  @relation(fields: [escalaId], references: [id])
+  veiculo Veiculo @relation(fields: [veiculoId], references: [id])
+
+  @@id([escalaId, veiculoId])
+  @@map("escala_veiculos")
+}
+
+model EscalaParceiro {
+  escalaId     String
+  parceiroId   String
+  qtdVeiculos  Int
+  tipoVeiculo  TipoVeiculo
+  valorRepasse Decimal     @db.Decimal(10, 2)
+  observacoes  String?
+
+  escala   Escala   @relation(fields: [escalaId], references: [id])
+  parceiro Parceiro @relation(fields: [parceiroId], references: [id])
+
+  @@id([escalaId, parceiroId])
+  @@map("escala_parceiros")
 }
 
 // ─────────────────────────────────────────
@@ -268,15 +328,20 @@ model Escala {
 
 model Contrato {
   id            String   @id @default(cuid())
-  atendimentoId String   @unique
-  // Texto preenchido automaticamente a partir dos dados do atendimento
-  textoGerado   String   @db.Text
-  urlPdf        String?
+  atendimentoId String
+  nomeArquivo   String
+  pdfUrl        String?
   geradoEm      DateTime @default(now())
+  geradoPor     String
+  ativo         Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  atendimento Atendimento @relation(fields: [atendimentoId], references: [id])
+  atendimento      Atendimento @relation(fields: [atendimentoId], references: [id])
+  geradoPorUsuario Usuario     @relation(fields: [geradoPor], references: [id])
 
+  @@index([atendimentoId])
+  @@index([geradoEm])
+  @@index([geradoPor])
   @@map("contratos")
 }

@@ -1,6 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { verificarToken } from "@/lib/auth";
 
+const rotasPublicasExatas = ["/login"];
+const rotasPublicasPrefixo = ["/api/auth", "/api/cep", "/api/cron/"];
+
 const rotasProtegidas = [
   "/dashboard",
   "/atendimentos",
@@ -10,8 +13,35 @@ const rotasProtegidas = [
   "/cadastros",
 ];
 
+function eRotaPublica(pathname: string) {
+  if (rotasPublicasExatas.includes(pathname)) {
+    return true;
+  }
+
+  return rotasPublicasPrefixo.some((rota) => pathname.startsWith(rota));
+}
+
+function redirecionarParaLogin(request: NextRequest) {
+  const destino = `${request.nextUrl.pathname}${request.nextUrl.search}`;
+  const url = new URL("/login", request.url);
+
+  if (destino && destino !== "/login") {
+    url.searchParams.set("next", destino);
+  }
+
+  return NextResponse.redirect(url);
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (eRotaPublica(pathname)) {
+    return NextResponse.next();
+  }
+
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.next();
+  }
 
   const eRotaProtegida = rotasProtegidas.some((rota) =>
     pathname.startsWith(rota),
@@ -21,17 +51,17 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
 
   if (!token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return redirecionarParaLogin(request);
   }
 
   try {
     await verificarToken(token);
     return NextResponse.next();
   } catch {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return redirecionarParaLogin(request);
   }
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

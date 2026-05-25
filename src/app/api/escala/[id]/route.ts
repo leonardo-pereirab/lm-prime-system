@@ -1,20 +1,30 @@
-import { NextResponse, type NextRequest } from "next/server";
-import type { Prisma } from "@prisma/client";
+import type { NextRequest } from "next/server";
+import { ok } from "@/lib/api-response";
+import { requireSession } from "@/lib/auth";
 import { escalaService } from "@/services/escalaService";
+import { escalaUpdateSchema } from "@/schemas/escala";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
-export async function GET(_request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  const escala = await escalaService.buscarPorAtendimento(id);
-  if (!escala)
-    return NextResponse.json({ error: "Nao encontrado" }, { status: 404 });
-  return NextResponse.json(escala);
+export async function GET(request: NextRequest, { params }: RouteParams) {
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    return escalaService.buscarPorAtendimento(id);
+  });
 }
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  const body = (await request.json()) as Prisma.EscalaUncheckedUpdateInput;
-  const escala = await escalaService.atualizar(id, body);
-  return NextResponse.json(escala);
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    const body = await request.json();
+    const input = escalaUpdateSchema.parse(body);
+    return escalaService.atualizar(id, {
+      observacoes: input.observacoes,
+      motoristaIds: input.motoristaIds ?? [],
+      veiculoIds: input.veiculoIds ?? [],
+      parceiros: input.parceiros ?? [],
+    });
+  });
 }

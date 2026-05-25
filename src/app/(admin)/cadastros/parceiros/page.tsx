@@ -1,7 +1,5 @@
+import ParceirosListagem from "@/app/(admin)/cadastros/parceiros/_components/ParceirosListagem";
+
 export default function ParceirosPage() {
-  return (
-    <div>
-      <h1>Parceiros</h1>
-    </div>
-  );
+  return <ParceirosListagem />;
 }

@@ -1,21 +1,49 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { buildQS, requestJson } from "@/hooks/http";
 
-export function useOrcamentos() {
-  const [orcamentos, setOrcamentos] = useState<unknown[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export function useOrcamentos(filtros: Record<string, unknown> = {}) {
+  return useQuery({
+    queryKey: ["orcamentos", filtros],
+    queryFn: () => requestJson(`/api/orcamentos?${buildQS(filtros)}`),
+    staleTime: 30_000,
+  });
+}
 
-  useEffect(() => {
-    fetch("/api/orcamentos")
-      .then((res) => res.json())
-      .then((data) => setOrcamentos(data))
-      .catch((err: unknown) => {
-        setError(err instanceof Error ? err.message : "Erro inesperado");
-      })
-      .finally(() => setLoading(false));
-  }, []);
+export function useOrcamento(id?: string) {
+  return useQuery({
+    queryKey: ["orcamento", id],
+    queryFn: () => requestJson(`/api/orcamentos/${id}`),
+    enabled: Boolean(id),
+  });
+}
 
-  return { orcamentos, loading, error };
+export function useCriarOrcamento() {
+  return useMutation({
+    mutationFn: (payload: unknown) =>
+      requestJson("/api/orcamentos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }),
+  });
+}
+
+export function useAtualizarOrcamento() {
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: unknown }) =>
+      requestJson(`/api/orcamentos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }),
+  });
+}
+
+export function useCancelarOrcamento() {
+  return useMutation({
+    mutationFn: (id: string) =>
+      requestJson(`/api/orcamentos/${id}`, { method: "DELETE" }),
+  });
 }

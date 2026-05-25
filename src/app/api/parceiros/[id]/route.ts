@@ -1,26 +1,34 @@
-import { NextResponse, type NextRequest } from "next/server";
-import type { Prisma } from "@prisma/client";
+import type { NextRequest } from "next/server";
+import { ok } from "@/lib/api-response";
+import { requireSession } from "@/lib/auth";
 import { parceiroService } from "@/services/parceiroService";
+import { parceiroUpdateSchema } from "@/schemas/parceiro";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
-export async function GET(_request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  const parceiro = await parceiroService.buscarPorId(id);
-  if (!parceiro)
-    return NextResponse.json({ error: "Nao encontrado" }, { status: 404 });
-  return NextResponse.json(parceiro);
+export async function GET(request: NextRequest, { params }: RouteParams) {
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    return parceiroService.buscarPorId(id);
+  });
 }
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  const body = (await request.json()) as Prisma.ParceiroUncheckedUpdateInput;
-  const parceiro = await parceiroService.atualizar(id, body);
-  return NextResponse.json(parceiro);
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    const body = await request.json();
+    const input = parceiroUpdateSchema.parse(body);
+    return parceiroService.atualizar(id, input);
+  });
 }
 
-export async function DELETE(_request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  await parceiroService.deletar(id);
-  return new NextResponse(null, { status: 204 });
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    await parceiroService.excluir(id);
+    return { removido: true };
+  });
 }

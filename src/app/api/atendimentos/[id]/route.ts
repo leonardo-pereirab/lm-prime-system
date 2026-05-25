@@ -1,26 +1,25 @@
-import { NextResponse, type NextRequest } from "next/server";
-import type { Prisma } from "@prisma/client";
+import type { NextRequest } from "next/server";
+import { ok } from "@/lib/api-response";
+import { requireSession } from "@/lib/auth";
 import { atendimentoService } from "@/services/atendimentoService";
+import { atendimentoUpdateSchema } from "@/schemas/atendimento";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
-export async function GET(_request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  const atendimento = await atendimentoService.buscarPorId(id);
-  if (!atendimento)
-    return NextResponse.json({ error: "Nao encontrado" }, { status: 404 });
-  return NextResponse.json(atendimento);
+export async function GET(request: NextRequest, { params }: RouteParams) {
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    return atendimentoService.buscarPorId(id);
+  });
 }
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  const body = (await request.json()) as Prisma.AtendimentoUncheckedUpdateInput;
-  const atendimento = await atendimentoService.atualizar(id, body);
-  return NextResponse.json(atendimento);
-}
-
-export async function DELETE(_request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  await atendimentoService.deletar(id);
-  return new NextResponse(null, { status: 204 });
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    const body = await request.json();
+    const input = atendimentoUpdateSchema.parse(body);
+    return atendimentoService.atualizar(id, input);
+  });
 }

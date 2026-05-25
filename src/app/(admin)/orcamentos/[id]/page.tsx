@@ -1,9 +1,11 @@
-type PageProps = { params: { id: string } };
+type PageProps = { params: Promise<{ id: string }> };
 
-export default function OrcamentoDetalhePage({ params }: PageProps) {
+export default async function OrcamentoDetalhePage({ params }: PageProps) {
+  const { id } = await params;
+
   return (
     <div>
-      <h1>Orcamento #{params.id}</h1>
+      <h1>Orcamento #{id}</h1>
     </div>
   );
 }

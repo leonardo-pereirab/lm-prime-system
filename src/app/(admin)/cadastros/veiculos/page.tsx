@@ -1,7 +1,5 @@
+import VeiculosListagem from "@/app/(admin)/cadastros/veiculos/_components/VeiculosListagem";
+
 export default function VeiculosPage() {
-  return (
-    <div>
-      <h1>Veiculos</h1>
-    </div>
-  );
+  return <VeiculosListagem />;
 }

@@ -1,26 +1,34 @@
-import { NextResponse, type NextRequest } from "next/server";
-import type { Prisma } from "@prisma/client";
+import type { NextRequest } from "next/server";
+import { ok } from "@/lib/api-response";
+import { requireSession } from "@/lib/auth";
 import { veiculoService } from "@/services/veiculoService";
+import { veiculoUpdateSchema } from "@/schemas/veiculo";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
-export async function GET(_request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  const veiculo = await veiculoService.buscarPorId(id);
-  if (!veiculo)
-    return NextResponse.json({ error: "Nao encontrado" }, { status: 404 });
-  return NextResponse.json(veiculo);
+export async function GET(request: NextRequest, { params }: RouteParams) {
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    return veiculoService.buscarPorId(id);
+  });
 }
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  const body = (await request.json()) as Prisma.VeiculoUncheckedUpdateInput;
-  const veiculo = await veiculoService.atualizar(id, body);
-  return NextResponse.json(veiculo);
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    const body = await request.json();
+    const input = veiculoUpdateSchema.parse(body);
+    return veiculoService.atualizar(id, input);
+  });
 }
 
-export async function DELETE(_request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  await veiculoService.deletar(id);
-  return new NextResponse(null, { status: 204 });
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    await veiculoService.excluir(id);
+    return { removido: true };
+  });
 }

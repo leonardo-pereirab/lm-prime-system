@@ -1,9 +1,11 @@
-type PageProps = { params: { id: string } };
+type PageProps = { params: Promise<{ id: string }> };
 
-export default function UsuarioDetalhePage({ params }: PageProps) {
+export default async function UsuarioDetalhePage({ params }: PageProps) {
+  const { id } = await params;
+
   return (
     <div>
-      <h1>Usuario #{params.id}</h1>
+      <h1>Usuario #{id}</h1>
     </div>
   );
 }

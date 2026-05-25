@@ -1,37 +1,78 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 
+export type ReservaFiltros = {
+  atendimentoId?: string;
+  pagina?: number;
+  tamanho?: number;
+};
+
+function montarWhere(filtros: Omit<ReservaFiltros, "pagina" | "tamanho">) {
+  const { atendimentoId } = filtros;
+
+  return {
+    ...(atendimentoId && { atendimentoId }),
+  } satisfies Prisma.ReservaWhereInput;
+}
+
 export const reservaRepository = {
-  async findAll() {
+  listar(filtros: ReservaFiltros = {}) {
+    const { pagina = 1, tamanho = 20 } = filtros;
+
     return prisma.reserva.findMany({
-      include: { atendimento: true, cliente: true },
+      where: montarWhere(filtros),
+      include: {
+        atendimento: {
+          include: {
+            cliente: {
+              select: {
+                id: true,
+                nome: true,
+                cpfCnpj: true,
+              },
+            },
+            orcamento: true,
+            escala: true,
+          },
+        },
+      },
       orderBy: { createdAt: "desc" },
+      skip: (pagina - 1) * tamanho,
+      take: tamanho,
     });
   },
 
-  async findById(id: string) {
+  contar(filtros: Omit<ReservaFiltros, "pagina" | "tamanho"> = {}) {
+    return prisma.reserva.count({ where: montarWhere(filtros) });
+  },
+
+  buscarPorId(id: string) {
     return prisma.reserva.findUnique({
       where: { id },
       include: {
-        atendimento: { include: { orcamento: true, escala: true } },
-        cliente: true,
+        atendimento: {
+          include: {
+            cliente: true,
+            orcamento: true,
+            escala: true,
+          },
+        },
       },
     });
   },
 
-  async findByAtendimentoId(atendimentoId: string) {
+  buscarPorAtendimentoId(atendimentoId: string) {
     return prisma.reserva.findUnique({ where: { atendimentoId } });
   },
 
-  async create(dados: Prisma.ReservaUncheckedCreateInput) {
+  criar(dados: Prisma.ReservaCreateInput | Prisma.ReservaUncheckedCreateInput) {
     return prisma.reserva.create({ data: dados });
   },
 
-  async update(id: string, dados: Prisma.ReservaUncheckedUpdateInput) {
+  atualizar(
+    id: string,
+    dados: Prisma.ReservaUpdateInput | Prisma.ReservaUncheckedUpdateInput,
+  ) {
     return prisma.reserva.update({ where: { id }, data: dados });
-  },
-
-  async delete(id: string) {
-    return prisma.reserva.delete({ where: { id } });
   },
 };

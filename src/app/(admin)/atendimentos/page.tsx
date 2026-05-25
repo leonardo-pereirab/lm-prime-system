@@ -1,7 +1,5 @@
+import AtendimentosListagem from "@/app/(admin)/atendimentos/_components/AtendimentosListagem";
+
 export default function AtendimentosPage() {
-  return (
-    <div>
-      <h1>Atendimentos</h1>
-    </div>
-  );
+  return <AtendimentosListagem />;
 }

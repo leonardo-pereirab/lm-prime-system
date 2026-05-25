@@ -1,9 +1,11 @@
-type PageProps = { params: { id: string } };
+type PageProps = { params: Promise<{ id: string }> };
 
-export default function ReservaDetalhePage({ params }: PageProps) {
+export default async function ReservaDetalhePage({ params }: PageProps) {
+  const { id } = await params;
+
   return (
     <div>
-      <h1>Reserva #{params.id}</h1>
+      <h1>Reserva #{id}</h1>
     </div>
   );
 }

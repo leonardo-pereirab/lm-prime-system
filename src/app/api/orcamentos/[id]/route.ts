@@ -1,26 +1,34 @@
-import { NextResponse, type NextRequest } from "next/server";
-import type { Prisma } from "@prisma/client";
+import type { NextRequest } from "next/server";
+import { ok } from "@/lib/api-response";
+import { requireSession } from "@/lib/auth";
 import { orcamentoService } from "@/services/orcamentoService";
+import { orcamentoUpdateSchema } from "@/schemas/orcamento";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
-export async function GET(_request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  const orcamento = await orcamentoService.buscarPorId(id);
-  if (!orcamento)
-    return NextResponse.json({ error: "Nao encontrado" }, { status: 404 });
-  return NextResponse.json(orcamento);
+export async function GET(request: NextRequest, { params }: RouteParams) {
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    return orcamentoService.buscarPorId(id);
+  });
 }
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  const body = (await request.json()) as Prisma.OrcamentoUncheckedUpdateInput;
-  const orcamento = await orcamentoService.atualizar(id, body);
-  return NextResponse.json(orcamento);
+  return ok(async () => {
+    await requireSession(request);
+    const { id } = await params;
+    const body = await request.json();
+    const input = orcamentoUpdateSchema.parse(body);
+    return orcamentoService.atualizar(id, input);
+  });
 }
 
-export async function DELETE(_request: NextRequest, { params }: RouteParams) {
-  const { id } = await params;
-  await orcamentoService.deletar(id);
-  return new NextResponse(null, { status: 204 });
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
+  return ok(async () => {
+    const session = await requireSession(request);
+    const { id } = await params;
+    await orcamentoService.cancelarManual(id, session.id);
+    return { removido: true };
+  });
 }

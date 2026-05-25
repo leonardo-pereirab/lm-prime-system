@@ -1,147 +1,177 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import type { Cliente } from "@prisma/client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { StatusAtendimento } from "@prisma/client";
+import { buildQS, requestJson } from "@/hooks/http";
 
-type DadosCliente = {
+type OrdenacaoCliente =
+  | "NOME_ASC"
+  | "NOME_DESC"
+  | "CRIADO_EM_DESC"
+  | "CRIADO_EM_ASC";
+
+export type ClienteListagemItem = {
+  id: string;
   nome: string;
   cpfCnpj: string;
-  rgIe?: string | null;
   telefone: string;
-  email?: string | null;
-  cep?: string | null;
-  logradouro?: string | null;
-  numero?: string | null;
-  complemento?: string | null;
-  bairro?: string | null;
-  cidade?: string | null;
-  uf?: string | null;
-  ativo?: boolean;
+  cidade: string | null;
+  estado: string | null;
+  ativo: boolean;
+  createdAt: string;
 };
 
-async function parseErroResposta(res: Response): Promise<string> {
-  try {
-    const corpo = (await res.json()) as { erro?: string; error?: string };
-    return corpo.erro ?? corpo.error ?? "Erro inesperado na operacao.";
-  } catch {
-    return "Erro inesperado na operacao.";
-  }
+export type ClienteDetalhe = {
+  id: string;
+  nome: string;
+  cpfCnpj: string;
+  rgIe: string | null;
+  telefone: string;
+  telefoneSec: string | null;
+  email: string | null;
+  cep: string | null;
+  logradouro: string | null;
+  numero: string | null;
+  complemento: string | null;
+  bairro: string | null;
+  cidade: string | null;
+  estado: string | null;
+  ativo: boolean;
+  observacoes: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ClienteResumoAtendimento = {
+  id: string;
+  codigo: string | null;
+  status: StatusAtendimento;
+  dataServico: string | null;
+  createdAt: string;
+};
+
+export type ClientesListagemResponse = {
+  itens: ClienteListagemItem[];
+  total: number;
+  pagina: number;
+  tamanho: number;
+  totalPaginas: number;
+};
+
+export type ClienteFiltrosHook = {
+  busca?: string;
+  incluirInativos?: boolean;
+  ordenarPor?: OrdenacaoCliente;
+  pagina?: number;
+  tamanho?: number;
+};
+
+export function useClientes(filtros: ClienteFiltrosHook = {}) {
+  return useQuery({
+    queryKey: ["clientes", filtros],
+    queryFn: () =>
+      requestJson<ClientesListagemResponse>(
+        `/api/clientes?${buildQS(filtros)}`,
+      ),
+    staleTime: 30_000,
+  });
 }
 
-export function useClientes() {
-  const [clientes, setClientes] = useState<Cliente[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [salvando, setSalvando] = useState(false);
-  const [erroCrud, setErroCrud] = useState<string | null>(null);
+export function useCliente(id?: string) {
+  return useQuery({
+    queryKey: ["cliente", id],
+    queryFn: () => requestJson<ClienteDetalhe>(`/api/clientes/${id}`),
+    enabled: Boolean(id),
+  });
+}
 
-  const recarregar = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+export function useCriarCliente() {
+  const queryClient = useQueryClient();
 
-    try {
-      const resposta = await fetch("/api/clientes");
-      if (!resposta.ok) {
-        throw new Error(await parseErroResposta(resposta));
-      }
-
-      const data = (await resposta.json()) as Cliente[];
-      setClientes(data);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Erro inesperado");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const criar = useCallback(
-    async (dados: DadosCliente) => {
-      setSalvando(true);
-      setErroCrud(null);
-
-      try {
-        const resposta = await fetch("/api/clientes", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dados),
-        });
-
-        if (!resposta.ok) {
-          throw new Error(await parseErroResposta(resposta));
-        }
-
-        await recarregar();
-      } catch (err: unknown) {
-        const mensagem =
-          err instanceof Error ? err.message : "Erro inesperado ao criar cliente.";
-        setErroCrud(mensagem);
-        throw new Error(mensagem);
-      } finally {
-        setSalvando(false);
-      }
+  return useMutation({
+    mutationFn: (payload: unknown) =>
+      requestJson("/api/clientes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["clientes"] });
     },
-    [recarregar],
-  );
+  });
+}
 
-  const atualizar = useCallback(
-    async (id: string, dados: Partial<DadosCliente>) => {
-      setSalvando(true);
-      setErroCrud(null);
+export function useAtualizarCliente() {
+  const queryClient = useQueryClient();
 
-      try {
-        const resposta = await fetch(`/api/clientes/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dados),
-        });
-
-        if (!resposta.ok) {
-          throw new Error(await parseErroResposta(resposta));
-        }
-
-        await recarregar();
-      } catch (err: unknown) {
-        const mensagem =
-          err instanceof Error
-            ? err.message
-            : "Erro inesperado ao atualizar cliente.";
-        setErroCrud(mensagem);
-        throw new Error(mensagem);
-      } finally {
-        setSalvando(false);
-      }
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: unknown }) =>
+      requestJson(`/api/clientes/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }),
+    onSuccess: (_, variables) => {
+      void queryClient.invalidateQueries({ queryKey: ["clientes"] });
+      void queryClient.invalidateQueries({
+        queryKey: ["cliente", variables.id],
+      });
     },
-    [recarregar],
-  );
+  });
+}
 
-  const desativar = useCallback(
-    async (id: string) => {
-      await atualizar(id, { ativo: false });
+export function useDesativarCliente() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) =>
+      requestJson(`/api/clientes/${id}/desativar`, {
+        method: "POST",
+      }),
+    onSuccess: (_, id) => {
+      void queryClient.invalidateQueries({ queryKey: ["clientes"] });
+      void queryClient.invalidateQueries({ queryKey: ["cliente", id] });
     },
-    [atualizar],
-  );
+  });
+}
 
-  const reativar = useCallback(
-    async (id: string) => {
-      await atualizar(id, { ativo: true });
+export function useAtivarCliente() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) =>
+      requestJson(`/api/clientes/${id}/ativar`, {
+        method: "POST",
+      }),
+    onSuccess: (_, id) => {
+      void queryClient.invalidateQueries({ queryKey: ["clientes"] });
+      void queryClient.invalidateQueries({ queryKey: ["cliente", id] });
     },
-    [atualizar],
-  );
+  });
+}
 
-  useEffect(() => {
-    void recarregar();
-  }, [recarregar]);
+export function useExcluirCliente() {
+  const queryClient = useQueryClient();
 
-  return {
-    clientes,
-    loading,
-    error,
-    salvando,
-    erroCrud,
-    recarregar,
-    criar,
-    atualizar,
-    desativar,
-    reativar,
-  };
+  return useMutation({
+    mutationFn: (id: string) =>
+      requestJson(`/api/clientes/${id}`, {
+        method: "DELETE",
+      }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["clientes"] });
+    },
+  });
+}
+
+export function useAtendimentosDoCliente(id?: string) {
+  return useQuery({
+    queryKey: ["cliente-atendimentos", id],
+    queryFn: () =>
+      requestJson<ClienteResumoAtendimento[]>(
+        `/api/clientes/${id}/atendimentos`,
+      ),
+    enabled: Boolean(id),
+    staleTime: 30_000,
+  });
 }

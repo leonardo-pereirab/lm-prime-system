@@ -1,34 +1,101 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 
+export type OrcamentoFiltros = {
+  atendimentoId?: string;
+  vencidosAte?: Date;
+  pagina?: number;
+  tamanho?: number;
+};
+
+function montarWhere(filtros: Omit<OrcamentoFiltros, "pagina" | "tamanho">) {
+  const { atendimentoId, vencidosAte } = filtros;
+
+  return {
+    ...(atendimentoId && { atendimentoId }),
+    ...(vencidosAte && { validoAte: { lte: vencidosAte } }),
+  } satisfies Prisma.OrcamentoWhereInput;
+}
+
 export const orcamentoRepository = {
-  async findAll() {
+  listar(filtros: OrcamentoFiltros = {}) {
+    const { pagina = 1, tamanho = 20 } = filtros;
+
     return prisma.orcamento.findMany({
-      include: { atendimento: { include: { cliente: true } } },
+      where: montarWhere(filtros),
+      include: {
+        atendimento: {
+          include: {
+            cliente: {
+              select: {
+                id: true,
+                nome: true,
+                cpfCnpj: true,
+              },
+            },
+          },
+        },
+      },
       orderBy: { createdAt: "desc" },
+      skip: (pagina - 1) * tamanho,
+      take: tamanho,
     });
   },
 
-  async findById(id: string) {
+  contar(filtros: Omit<OrcamentoFiltros, "pagina" | "tamanho"> = {}) {
+    return prisma.orcamento.count({ where: montarWhere(filtros) });
+  },
+
+  buscarPorId(id: string) {
     return prisma.orcamento.findUnique({
       where: { id },
-      include: { atendimento: { include: { cliente: true } } },
+      include: {
+        atendimento: {
+          include: { cliente: true },
+        },
+      },
     });
   },
 
-  async findByAtendimentoId(atendimentoId: string) {
+  buscarPorAtendimentoId(atendimentoId: string) {
     return prisma.orcamento.findUnique({ where: { atendimentoId } });
   },
 
-  async create(dados: Prisma.OrcamentoUncheckedCreateInput) {
+  listarVencidosPendentes(referencia = new Date()) {
+    return prisma.orcamento.findMany({
+      where: {
+        validoAte: { lt: referencia },
+        atendimento: {
+          status: "ORCAMENTO_REGISTRADO_AG_APROVACAO",
+        },
+      },
+      include: {
+        atendimento: {
+          include: {
+            cliente: {
+              select: {
+                id: true,
+                nome: true,
+                cpfCnpj: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: { validoAte: "asc" },
+    });
+  },
+
+  criar(
+    dados: Prisma.OrcamentoCreateInput | Prisma.OrcamentoUncheckedCreateInput,
+  ) {
     return prisma.orcamento.create({ data: dados });
   },
 
-  async update(id: string, dados: Prisma.OrcamentoUncheckedUpdateInput) {
+  atualizar(
+    id: string,
+    dados: Prisma.OrcamentoUpdateInput | Prisma.OrcamentoUncheckedUpdateInput,
+  ) {
     return prisma.orcamento.update({ where: { id }, data: dados });
-  },
-
-  async delete(id: string) {
-    return prisma.orcamento.delete({ where: { id } });
   },
 };
