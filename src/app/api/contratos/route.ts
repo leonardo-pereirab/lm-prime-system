@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const { pagina, tamanho } = parsePagination(url.searchParams);
 
-    return contratoService.listar({
+    return contratoService.listarPaginado({
       clienteId: url.searchParams.get("clienteId") ?? undefined,
       periodoInicio: parseDate(url.searchParams.get("periodoInicio")),
       periodoFim: parseDate(url.searchParams.get("periodoFim")),

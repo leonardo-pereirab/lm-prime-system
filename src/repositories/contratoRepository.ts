@@ -10,6 +10,37 @@ export type ContratoFiltros = {
   tamanho?: number;
 };
 
+export type ContratoListagemItem = {
+  id: string;
+  atendimentoId: string;
+  pdfUrl: string | null;
+  geradoEm: Date;
+  ativo: boolean;
+  atendimento: {
+    id: string;
+    codigo: string | null;
+    dataServico: Date | null;
+    cliente: {
+      id: string;
+      nome: string;
+      cpfCnpj: string;
+    } | null;
+  };
+  geradoPorUsuario: {
+    id: string;
+    nome: string;
+    email: string;
+  } | null;
+};
+
+export type ContratoListagemPaginada = {
+  itens: ContratoListagemItem[];
+  total: number;
+  pagina: number;
+  tamanho: number;
+  totalPaginas: number;
+};
+
 function montarWhere(filtros: Omit<ContratoFiltros, "pagina" | "tamanho">) {
   const { clienteId, periodoInicio, periodoFim, apenasAtivos = true } = filtros;
 
@@ -63,6 +94,59 @@ export const contratoRepository = {
 
   contar(filtros: Omit<ContratoFiltros, "pagina" | "tamanho"> = {}) {
     return prisma.contrato.count({ where: montarWhere(filtros) });
+  },
+
+  async listarPaginado(
+    filtros: ContratoFiltros = {},
+  ): Promise<ContratoListagemPaginada> {
+    const { pagina = 1, tamanho = 10 } = filtros;
+    const where = montarWhere(filtros);
+
+    const selectAtendimento = {
+      id: true,
+      codigo: true,
+      dataServico: true,
+      cliente: {
+        select: {
+          id: true,
+          nome: true,
+          cpfCnpj: true,
+        },
+      },
+    } as const;
+
+    const selectGeradoPor = {
+      id: true,
+      nome: true,
+      email: true,
+    } as const;
+
+    const [itens, total] = await prisma.$transaction([
+      prisma.contrato.findMany({
+        where,
+        select: {
+          id: true,
+          atendimentoId: true,
+          pdfUrl: true,
+          geradoEm: true,
+          ativo: true,
+          atendimento: { select: selectAtendimento },
+          geradoPorUsuario: { select: selectGeradoPor },
+        },
+        orderBy: { geradoEm: "desc" },
+        skip: (pagina - 1) * tamanho,
+        take: tamanho,
+      }),
+      prisma.contrato.count({ where }),
+    ]);
+
+    return {
+      itens,
+      total,
+      pagina,
+      tamanho,
+      totalPaginas: Math.max(1, Math.ceil(total / tamanho)),
+    };
   },
 
   buscarPorId(id: string) {
