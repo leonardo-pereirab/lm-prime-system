@@ -4,16 +4,18 @@ import type { Prisma } from "@prisma/client";
 export type OrcamentoFiltros = {
   atendimentoId?: string;
   vencidosAte?: Date;
+  somenteAtivos?: boolean;
   pagina?: number;
   tamanho?: number;
 };
 
 function montarWhere(filtros: Omit<OrcamentoFiltros, "pagina" | "tamanho">) {
-  const { atendimentoId, vencidosAte } = filtros;
+  const { atendimentoId, vencidosAte, somenteAtivos } = filtros;
 
   return {
     ...(atendimentoId && { atendimentoId }),
     ...(vencidosAte && { validoAte: { lte: vencidosAte } }),
+    ...(somenteAtivos && { validoAte: { gte: new Date() } }),
   } satisfies Prisma.OrcamentoWhereInput;
 }
 

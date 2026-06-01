@@ -112,8 +112,16 @@ describe("orcamentoService", () => {
 
     const resultado = await orcamentoService.cancelarVencidos();
 
-    expect(prismaMock.atendimento.updateMany).toHaveBeenCalled();
-    expect(resultado.totalCancelados).toBe(1);
+    expect(prismaMock.atendimento.update).toHaveBeenCalledWith({
+      where: { id: "atd-1" },
+      data: {
+        status: "ORCAMENTO_CANCELADO",
+        statusAnteriorCancelamento: "ORCAMENTO_REGISTRADO_AG_APROVACAO",
+        canceladoEm: expect.any(Date),
+      },
+    });
+    expect(resultado.processados).toBe(1);
+    expect(resultado.cancelados).toBe(1);
   });
 
   it("deve cancelar manualmente e atualizar status do atendimento", async () => {

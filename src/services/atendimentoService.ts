@@ -77,6 +77,14 @@ export const atendimentoService = {
     return resposta.itens;
   },
 
+  async listarFilaOrcamentos() {
+    return atendimentoRepository.listarFilaOrcamentos();
+  },
+
+  async listarFilaReservas() {
+    return atendimentoRepository.listarFilaReservas();
+  },
+
   async buscarPorId(id: string) {
     return obterAtendimentoOuFalhar(id);
   },

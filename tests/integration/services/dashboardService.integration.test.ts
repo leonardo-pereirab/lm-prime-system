@@ -142,12 +142,21 @@ describeIntegracao.sequential("dashboardService (integracao)", () => {
     const periodo = {
       inicio: new Date("2025-01-01T00:00:00.000Z"),
       fim: new Date("2027-12-31T23:59:59.000Z"),
+      preset: "custom" as const,
     };
 
     const indicadores = await dashboardService.obterIndicadores(periodo);
 
     expect(indicadores.totalAtendimentos).toBeGreaterThanOrEqual(1);
     expect(indicadores.totalServicos).toBeGreaterThanOrEqual(1);
+    expect(indicadores.totais.abertos).toBeGreaterThanOrEqual(0);
+    expect(indicadores.totais.finalizados).toBeGreaterThanOrEqual(1);
+    expect(indicadores.totais.cancelados).toBeGreaterThanOrEqual(0);
+    expect(indicadores.conversoes.atendimentoParaServico).toBeGreaterThan(0);
+    expect(indicadores.conversoes.solicitacaoParaOrcamento).toBeGreaterThan(0);
+    expect(indicadores.conversoes.orcamentoParaReserva).toBeGreaterThan(0);
+    expect(indicadores.conversoes.reservaParaServico).toBeGreaterThan(0);
+    expect(indicadores.historicoServicos.length).toBeGreaterThanOrEqual(1);
     expect(indicadores.topRecursos.motoristas.length).toBeGreaterThanOrEqual(1);
     expect(indicadores.topRecursos.veiculos.length).toBeGreaterThanOrEqual(1);
     expect(indicadores.topRecursos.parceiros.length).toBeGreaterThanOrEqual(1);

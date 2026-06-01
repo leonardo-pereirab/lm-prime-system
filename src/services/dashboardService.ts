@@ -1,15 +1,24 @@
 import { prisma } from "@/lib/prisma";
 import type { Prisma, StatusAtendimento } from "@prisma/client";
-
-export type DashboardPeriodo = {
-  inicio: Date;
-  fim: Date;
-};
+import type { DashboardPeriodo } from "@/lib/dashboard-periodo";
 
 type DashboardTopItem = {
   id: string;
   nome: string;
   total: number;
+};
+
+type DashboardHistoricoServico = {
+  id: string;
+  codigo: string | null;
+  dataServico: Date | null;
+  updatedAt: Date;
+  cliente: {
+    id: string;
+    nome: string;
+    cpfCnpj: string;
+  } | null;
+  leadNome: string | null;
 };
 
 const STATUS_CANCELADOS: StatusAtendimento[] = [
@@ -33,34 +42,48 @@ export const dashboardService = {
   async obterIndicadores(periodo: DashboardPeriodo) {
     const whereBase = filtroPeriodo(periodo);
 
+    const whereAbertos = {
+      ...whereBase,
+      status: {
+        in: [
+          "EM_SOLICITACAO",
+          "AGUARDANDO_ORCAMENTO",
+          "ORCAMENTO_REGISTRADO_AG_APROVACAO",
+          "AGUARDANDO_RESERVA",
+          "RESERVA_REGISTRADA_AG_ESCALA",
+          "ESCALA_DEFINIDA",
+          "SERVICO_EM_ANDAMENTO",
+        ] satisfies StatusAtendimento[],
+      },
+    } satisfies Prisma.AtendimentoWhereInput;
+
     const [
       totalAtendimentos,
-      totalSolicitacoes,
       totalOrcamentos,
       totalReservas,
       totalServicos,
+      totalAbertos,
       cancelamentos,
       cancelamentosPorEtapa,
+      historicoServicos,
     ] = await Promise.all([
       prisma.atendimento.count({ where: whereBase }),
       prisma.atendimento.count({
-        where: { ...whereBase, status: "EM_SOLICITACAO" },
-      }),
-      prisma.atendimento.count({
         where: {
           ...whereBase,
-          status: "ORCAMENTO_REGISTRADO_AG_APROVACAO",
+          orcamento: { isNot: null },
         },
       }),
       prisma.atendimento.count({
         where: {
           ...whereBase,
-          status: "RESERVA_REGISTRADA_AG_ESCALA",
+          reserva: { isNot: null },
         },
       }),
       prisma.atendimento.count({
         where: { ...whereBase, status: "SERVICO_FINALIZADO" },
       }),
+      prisma.atendimento.count({ where: whereAbertos }),
       prisma.atendimento.count({
         where: {
           ...whereBase,
@@ -76,16 +99,49 @@ export const dashboardService = {
           statusAnteriorCancelamento: { not: null },
         },
       }),
+      prisma.atendimento.findMany({
+        where: {
+          ...whereBase,
+          status: "SERVICO_FINALIZADO",
+        },
+        select: {
+          id: true,
+          codigo: true,
+          dataServico: true,
+          updatedAt: true,
+          leadNome: true,
+          cliente: {
+            select: {
+              id: true,
+              nome: true,
+              cpfCnpj: true,
+            },
+          },
+        },
+        orderBy: [{ dataServico: "desc" }, { updatedAt: "desc" }],
+        take: 10,
+      }),
     ]);
+
+    const totalSolicitacoes = totalAtendimentos;
 
     return {
       totalAtendimentos,
+      totais: {
+        abertos: totalAbertos,
+        finalizados: totalServicos,
+        cancelados: cancelamentos,
+      },
       totalSolicitacoes,
       totalOrcamentos,
       totalReservas,
       totalServicos,
       cancelamentos,
       conversoes: {
+        atendimentoParaServico:
+          totalAtendimentos > 0
+            ? Number((totalServicos / totalAtendimentos).toFixed(4))
+            : 0,
         solicitacaoParaOrcamento:
           totalSolicitacoes > 0
             ? Number((totalOrcamentos / totalSolicitacoes).toFixed(4))
@@ -108,6 +164,7 @@ export const dashboardService = {
         veiculos: await this.topVeiculos(periodo),
         parceiros: await this.topParceiros(periodo),
       },
+      historicoServicos: historicoServicos as DashboardHistoricoServico[],
     };
   },
 

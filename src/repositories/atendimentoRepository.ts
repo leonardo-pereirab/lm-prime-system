@@ -1,6 +1,7 @@
 import { ConflictError } from "@/domain/errors";
 import { gerarCodigoAtendimento } from "@/domain/helpers";
 import { prisma } from "@/lib/prisma";
+import { addDays } from "date-fns";
 import { Prisma } from "@prisma/client";
 import type { StatusAtendimento } from "@prisma/client";
 
@@ -41,6 +42,39 @@ export type AtendimentoListagemPaginada = {
   pagina: number;
   tamanho: number;
   totalPaginas: number;
+};
+
+export type AtendimentoFilaOrcamentoItem = {
+  id: string;
+  codigo: string | null;
+  status: StatusAtendimento;
+  dataServico: Date | null;
+  leadNome: string | null;
+  leadTelefone: string | null;
+  createdAt: Date;
+  cliente: {
+    id: string;
+    nome: string;
+    cpfCnpj: string;
+  } | null;
+  orcamento: {
+    validoAte: Date;
+  } | null;
+};
+
+export type AtendimentoFilaReservaItem = {
+  id: string;
+  codigo: string | null;
+  status: StatusAtendimento;
+  dataServico: Date | null;
+  leadNome: string | null;
+  leadTelefone: string | null;
+  createdAt: Date;
+  cliente: {
+    id: string;
+    nome: string;
+    cpfCnpj: string;
+  } | null;
 };
 
 type PrismaExecutor = typeof prisma | Prisma.TransactionClient;
@@ -96,6 +130,23 @@ function montarWhere(filtros: Omit<AtendimentoFiltros, "pagina" | "tamanho">) {
 function obterClientePrisma(executor: PrismaExecutor) {
   return executor.atendimento;
 }
+
+const SELECT_FILA_BASE = {
+  id: true,
+  codigo: true,
+  status: true,
+  dataServico: true,
+  leadNome: true,
+  leadTelefone: true,
+  createdAt: true,
+  cliente: {
+    select: {
+      id: true,
+      nome: true,
+      cpfCnpj: true,
+    },
+  },
+} as const;
 
 export const atendimentoRepository = {
   listar(filtros: AtendimentoFiltros = {}) {
@@ -172,6 +223,99 @@ export const atendimentoRepository = {
       tamanho,
       totalPaginas: Math.max(1, Math.ceil(total / tamanho)),
     };
+  },
+
+  async listarFilaOrcamentos(
+    referencia = new Date(),
+  ): Promise<AtendimentoFilaOrcamentoItem[]> {
+    const [aguardandoOrcamento, aguardandoAprovacao] =
+      await prisma.$transaction([
+        prisma.atendimento.findMany({
+          where: { status: "AGUARDANDO_ORCAMENTO" },
+          select: {
+            ...SELECT_FILA_BASE,
+            orcamento: { select: { validoAte: true } },
+          },
+          orderBy: [{ createdAt: "asc" }],
+        }),
+        prisma.atendimento.findMany({
+          where: {
+            status: "ORCAMENTO_REGISTRADO_AG_APROVACAO",
+            orcamento: {
+              is: {
+                validoAte: { gte: referencia },
+              },
+            },
+          },
+          select: {
+            ...SELECT_FILA_BASE,
+            orcamento: { select: { validoAte: true } },
+          },
+        }),
+      ]);
+
+    const aprovacaoOrdenada = aguardandoAprovacao.sort((a, b) => {
+      const validadeA =
+        a.orcamento?.validoAte?.getTime() ?? Number.MAX_SAFE_INTEGER;
+      const validadeB =
+        b.orcamento?.validoAte?.getTime() ?? Number.MAX_SAFE_INTEGER;
+
+      if (validadeA !== validadeB) {
+        return validadeA - validadeB;
+      }
+
+      return a.createdAt.getTime() - b.createdAt.getTime();
+    });
+
+    return [...aguardandoOrcamento, ...aprovacaoOrdenada];
+  },
+
+  async listarFilaReservas(
+    referencia = new Date(),
+  ): Promise<AtendimentoFilaReservaItem[]> {
+    const limite = addDays(referencia, 7);
+    const itens = await prisma.atendimento.findMany({
+      where: {
+        OR: [
+          {
+            status: {
+              in: ["AGUARDANDO_RESERVA", "RESERVA_REGISTRADA_AG_ESCALA"],
+            },
+          },
+          {
+            status: "ESCALA_DEFINIDA",
+            dataServico: {
+              gte: referencia,
+              lte: limite,
+            },
+          },
+        ],
+      },
+      select: SELECT_FILA_BASE,
+    });
+
+    return itens.sort((a, b) => {
+      if (!a.dataServico && !b.dataServico) {
+        return a.createdAt.getTime() - b.createdAt.getTime();
+      }
+
+      if (!a.dataServico) {
+        return 1;
+      }
+
+      if (!b.dataServico) {
+        return -1;
+      }
+
+      const diferencaDataServico =
+        a.dataServico.getTime() - b.dataServico.getTime();
+
+      if (diferencaDataServico !== 0) {
+        return diferencaDataServico;
+      }
+
+      return a.createdAt.getTime() - b.createdAt.getTime();
+    });
   },
 
   contar(filtros: Omit<AtendimentoFiltros, "pagina" | "tamanho"> = {}) {

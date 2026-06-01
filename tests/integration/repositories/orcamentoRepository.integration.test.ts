@@ -130,4 +130,77 @@ describeIntegracao.sequential("orcamentoRepository (integracao)", () => {
     expect(resultado.map((item) => item.id)).not.toContain(naoVencido.id);
     expect(resultado.map((item) => item.id)).not.toContain(cancelado.id);
   });
+
+  it("deve ocultar orcamentos vencidos na listagem de ativos", async () => {
+    const marcador = marcadorTeste("orcamento-ativo");
+
+    const usuario = await prisma.usuario.create({
+      data: {
+        nome: `Usuario ${marcador}`,
+        email: `${marcador}@teste.com`,
+        senha: "hash",
+        perfil: "ADMIN",
+      },
+    });
+    ids.usuarios.push(usuario.id);
+
+    const atendimentoAtivo = await prisma.atendimento.create({
+      data: {
+        codigo: `ATD-2026-${String(Math.floor(Math.random() * 99999)).padStart(5, "0")}`,
+        status: "ORCAMENTO_REGISTRADO_AG_APROVACAO",
+        dataContato: new Date("2026-01-01T00:00:00.000Z"),
+        qtdPassageiros: 3,
+        tipoServico: "VIAGEM",
+        precisaNotaFiscal: false,
+        trajeto: { origem: "A", destino: "B" },
+        leadNome: "Lead Ativo",
+        leadTelefone: "11944444444",
+        criadoPor: usuario.id,
+      },
+    });
+    ids.atendimentos.push(atendimentoAtivo.id);
+
+    const atendimentoVencido = await prisma.atendimento.create({
+      data: {
+        codigo: `ATD-2026-${String(Math.floor(Math.random() * 99999)).padStart(5, "0")}`,
+        status: "ORCAMENTO_REGISTRADO_AG_APROVACAO",
+        dataContato: new Date("2026-01-01T00:00:00.000Z"),
+        qtdPassageiros: 3,
+        tipoServico: "VIAGEM",
+        precisaNotaFiscal: false,
+        trajeto: { origem: "A", destino: "B" },
+        leadNome: "Lead Vencido",
+        leadTelefone: "11955555555",
+        criadoPor: usuario.id,
+      },
+    });
+    ids.atendimentos.push(atendimentoVencido.id);
+
+    const orcamentoAtivo = await prisma.orcamento.create({
+      data: {
+        atendimentoId: atendimentoAtivo.id,
+        valorTotal: "1500.00",
+        formaPagamento: "PIX",
+        validoAte: new Date("2099-01-01T00:00:00.000Z"),
+        veiculosPrevistos: [{ tipo: "VAN", quantidade: 1 }],
+      },
+    });
+    ids.orcamentos.push(orcamentoAtivo.id);
+
+    const orcamentoVencido = await prisma.orcamento.create({
+      data: {
+        atendimentoId: atendimentoVencido.id,
+        valorTotal: "1600.00",
+        formaPagamento: "PIX",
+        validoAte: new Date("2020-01-01T00:00:00.000Z"),
+        veiculosPrevistos: [{ tipo: "VAN", quantidade: 1 }],
+      },
+    });
+    ids.orcamentos.push(orcamentoVencido.id);
+
+    const resultado = await orcamentoRepository.listar({ somenteAtivos: true });
+
+    expect(resultado.map((item) => item.id)).toContain(orcamentoAtivo.id);
+    expect(resultado.map((item) => item.id)).not.toContain(orcamentoVencido.id);
+  });
 });
