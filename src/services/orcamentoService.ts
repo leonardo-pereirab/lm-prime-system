@@ -30,7 +30,7 @@ function normalizarData(data?: Date | string | null): Date | undefined {
 
 export const orcamentoService = {
   async listar(filtros: OrcamentoFiltros = {}) {
-    return orcamentoRepository.listar(filtros);
+    return orcamentoRepository.listar({ somenteAtivos: true, ...filtros });
   },
 
   async listarTodos() {
@@ -181,35 +181,31 @@ export const orcamentoService = {
     });
   },
 
-  async cancelarVencidos() {
-    const vencidos = await orcamentoRepository.listarVencidosPendentes();
+  async cancelarVencidos(referencia = new Date()) {
+    const vencidos =
+      await orcamentoRepository.listarVencidosPendentes(referencia);
 
-    if (vencidos.length === 0) {
-      return { totalCancelados: 0 };
-    }
-
-    const idsAtendimentos = vencidos.map(
-      (orcamento) => orcamento.atendimentoId,
-    );
-
-    await prisma.atendimento.updateMany({
-      where: { id: { in: idsAtendimentos } },
-      data: {
-        status: "ORCAMENTO_CANCELADO",
-        canceladoEm: new Date(),
-      },
-    });
+    let cancelados = 0;
 
     for (const orcamento of vencidos) {
-      await prisma.atendimento.update({
-        where: { id: orcamento.atendimentoId },
-        data: {
-          statusAnteriorCancelamento: orcamento.atendimento.status,
-        },
+      await prisma.$transaction(async (tx) => {
+        await tx.atendimento.update({
+          where: { id: orcamento.atendimentoId },
+          data: {
+            status: "ORCAMENTO_CANCELADO",
+            statusAnteriorCancelamento: orcamento.atendimento.status,
+            canceladoEm: referencia,
+          },
+        });
       });
+
+      cancelados += 1;
     }
 
-    return { totalCancelados: vencidos.length };
+    return {
+      processados: vencidos.length,
+      cancelados,
+    };
   },
 
   async validarAprovacaoParaReserva(atendimentoId: string) {

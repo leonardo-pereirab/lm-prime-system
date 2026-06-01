@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
     return orcamentoService.listar({
       atendimentoId: url.searchParams.get("atendimentoId") ?? undefined,
       vencidosAte: parseDate(url.searchParams.get("vencidosAte")),
+      somenteAtivos: url.searchParams.get("somenteAtivos") !== "false",
       pagina,
       tamanho,
     });

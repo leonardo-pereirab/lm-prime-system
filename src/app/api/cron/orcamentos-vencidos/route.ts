@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { fail } from "@/lib/api-response";
+import { logger } from "@/lib/logger";
 import { UnauthorizedError } from "@/domain/errors";
 import { orcamentoService } from "@/services/orcamentoService";
 
@@ -14,6 +15,7 @@ export async function GET(request: NextRequest) {
     }
 
     const resultado = await orcamentoService.cancelarVencidos();
+    logger.info({ resultado }, "Cron de orcamentos vencidos processado");
     return NextResponse.json({ success: true, data: resultado });
   } catch (error) {
     return fail(error);
