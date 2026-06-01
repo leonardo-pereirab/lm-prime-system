@@ -268,6 +268,10 @@ export const contratoService = {
     return contratoRepository.listar(filtros);
   },
 
+  async listarPaginado(filtros: ContratoFiltros = {}) {
+    return contratoRepository.listarPaginado(filtros);
+  },
+
   async listarTodos() {
     return this.listar();
   },

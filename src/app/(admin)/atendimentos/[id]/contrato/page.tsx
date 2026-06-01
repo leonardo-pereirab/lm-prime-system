@@ -24,7 +24,11 @@ export default async function AtendimentoContratoPage({ params }: PageProps) {
         </p>
       </PageHeader>
 
-      <ContratoEtapaClient atendimentoId={id} contratos={contratos} />
+      <ContratoEtapaClient
+        atendimentoId={id}
+        contratos={contratos}
+        status={atendimento.status}
+      />
     </div>
   );
 }

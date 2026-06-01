@@ -1,11 +1,24 @@
 "use client";
 
-import { FileDown, FileText, Loader2 } from "lucide-react";
+import {
+  FileDown,
+  FileText,
+  Loader2,
+  PlayCircle,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import type { StatusAtendimento } from "@prisma/client";
 
+import {
+  avancarEtapa,
+  cancelarAtendimento,
+} from "@/app/(admin)/atendimentos/_actions";
+import { ConfirmDialog } from "@/components/feedback/ConfirmDialog";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import {
@@ -33,17 +46,24 @@ type ContratoItem = {
 type ContratoEtapaClientProps = {
   atendimentoId: string;
   contratos: ContratoItem[];
+  status: StatusAtendimento;
 };
 
 export default function ContratoEtapaClient({
   atendimentoId,
   contratos,
+  status,
 }: ContratoEtapaClientProps) {
   const router = useRouter();
   const gerarContrato = useGerarContrato();
   const [gerando, setGerando] = useState(false);
+  const [emAcao, setEmAcao] = useState(false);
+  const [dialogIniciar, setDialogIniciar] = useState(false);
+  const [dialogFinalizar, setDialogFinalizar] = useState(false);
+  const [dialogEncerrar, setDialogEncerrar] = useState(false);
 
   const contratoMaisRecente = contratos[0] ?? null;
+  const servicoFinalizado = status === "SERVICO_FINALIZADO";
 
   async function onGerarContrato() {
     setGerando(true);
@@ -63,14 +83,90 @@ export default function ContratoEtapaClient({
     }
   }
 
+  async function onIniciarServico() {
+    const resultado = await avancarEtapa(atendimentoId, {
+      para: "SERVICO_INICIAR",
+    });
+
+    if (!resultado.success) {
+      toast.error(resultado.error.message);
+      return;
+    }
+
+    toast.success("Servico iniciado.");
+    router.refresh();
+  }
+
+  async function onFinalizarServico() {
+    const resultado = await avancarEtapa(atendimentoId, {
+      para: "SERVICO_FINALIZAR",
+    });
+
+    if (!resultado.success) {
+      toast.error(resultado.error.message);
+      return;
+    }
+
+    toast.success("Servico finalizado.");
+    router.refresh();
+  }
+
+  async function onEncerrarAtendimento() {
+    setEmAcao(true);
+    const resultado = await cancelarAtendimento(atendimentoId, {
+      etapa: "RESERVA_CANCELADA",
+    });
+    setEmAcao(false);
+
+    if (!resultado.success) {
+      toast.error(resultado.error.message);
+      return;
+    }
+
+    toast.success("Atendimento encerrado.");
+    router.push("/atendimentos");
+  }
+
   return (
     <div className="space-y-6">
+      <ConfirmDialog
+        aberto={dialogIniciar}
+        onAbertoChange={setDialogIniciar}
+        titulo="Iniciar servico"
+        descricao="Confirma o inicio do servico? O status sera atualizado para 'Servico em andamento'."
+        textoConfirmar="Iniciar servico"
+        onConfirmar={onIniciarServico}
+      />
+
+      <ConfirmDialog
+        aberto={dialogFinalizar}
+        onAbertoChange={setDialogFinalizar}
+        titulo="Finalizar servico"
+        descricao="Confirma a finalizacao do servico? Esta acao encerra o atendimento e nao pode ser desfeita."
+        textoConfirmar="Finalizar servico"
+        onConfirmar={onFinalizarServico}
+      />
+
+      <ConfirmDialog
+        aberto={dialogEncerrar}
+        onAbertoChange={setDialogEncerrar}
+        titulo="Encerrar atendimento"
+        descricao="Deseja encerrar o atendimento nesta etapa? Esta acao nao remove registros historicos."
+        textoConfirmar="Encerrar atendimento"
+        varianteConfirmar="destructive"
+        onConfirmar={onEncerrarAtendimento}
+      />
+
       <Card>
         <CardHeader>
           <CardTitle>Acoes do contrato</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
-          <Button type="button" onClick={onGerarContrato} disabled={gerando}>
+          <Button
+            type="button"
+            onClick={onGerarContrato}
+            disabled={gerando || servicoFinalizado}
+          >
             {gerando ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
@@ -81,7 +177,7 @@ export default function ContratoEtapaClient({
 
           {contratoMaisRecente ? (
             <>
-              <Button asChild variant="outline">
+              <Button asChild variant="outline" disabled={gerando}>
                 <Link
                   href={`/api/contratos/${contratoMaisRecente.id}/download?disposition=inline`}
                   target="_blank"
@@ -92,7 +188,7 @@ export default function ContratoEtapaClient({
                 </Link>
               </Button>
 
-              <Button asChild variant="outline">
+              <Button asChild variant="outline" disabled={gerando}>
                 <Link
                   href={`/api/contratos/${contratoMaisRecente.id}/download?disposition=attachment`}
                 >
@@ -101,6 +197,36 @@ export default function ContratoEtapaClient({
                 </Link>
               </Button>
             </>
+          ) : null}
+
+          {status === "ESCALA_DEFINIDA" ? (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setDialogIniciar(true)}
+            >
+              <PlayCircle className="size-4" />
+              Iniciar servico
+            </Button>
+          ) : null}
+
+          {status === "SERVICO_EM_ANDAMENTO" ? (
+            <Button type="button" onClick={() => setDialogFinalizar(true)}>
+              <CheckCircle className="size-4" />
+              Finalizar servico
+            </Button>
+          ) : null}
+
+          {status === "ESCALA_DEFINIDA" ? (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setDialogEncerrar(true)}
+              disabled={emAcao}
+            >
+              <XCircle className="size-4" />
+              Encerrar atendimento
+            </Button>
           ) : null}
         </CardContent>
       </Card>

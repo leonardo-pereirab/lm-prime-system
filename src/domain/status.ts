@@ -58,7 +58,11 @@ export const TRANSICOES_VALIDAS: Record<
     "RESERVA_CANCELADA",
     "ATENDIMENTO_CANCELADO",
   ],
-  ESCALA_DEFINIDA: ["SERVICO_EM_ANDAMENTO", "ATENDIMENTO_CANCELADO"],
+  ESCALA_DEFINIDA: [
+    "SERVICO_EM_ANDAMENTO",
+    "RESERVA_CANCELADA",
+    "ATENDIMENTO_CANCELADO",
+  ],
   SERVICO_EM_ANDAMENTO: ["SERVICO_FINALIZADO"],
   SERVICO_FINALIZADO: [],
   ORCAMENTO_CANCELADO: [],
@@ -220,13 +224,17 @@ export function etapasParaStatus(
     statusAnteriorCancelamento,
   );
   const possuiCancelamento = etapaCancelada !== null;
+  const todasConcluidas = status === "SERVICO_FINALIZADO";
 
   return ETAPAS_ATENDIMENTO.map((etapa, indice) => {
     let statusVisual: EtapaVisualStatus;
 
     if (etapaCancelada && etapa.id === etapaCancelada) {
       statusVisual = "cancelada";
-    } else if (indice < indiceAtual) {
+    } else if (
+      indice < indiceAtual ||
+      (todasConcluidas && indice === indiceAtual)
+    ) {
       statusVisual = "concluida";
     } else if (indice === indiceAtual && !possuiCancelamento) {
       statusVisual = "atual";

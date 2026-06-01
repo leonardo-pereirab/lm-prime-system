@@ -197,7 +197,7 @@ function SeletorMultiplo({
           <ChevronsUpDown className="size-4 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-[360px] p-0">
+      <PopoverContent align="start" className="w-90 p-0">
         <Command>
           <CommandInput placeholder={buscaPlaceholder} />
           <CommandList>
