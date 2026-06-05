@@ -4,6 +4,14 @@ import type { ClienteFiltros } from "@/repositories/clienteRepository";
 import type { ClienteInput, ClienteUpdate } from "@/schemas/cliente";
 import type { Prisma } from "@prisma/client";
 
+function gerarDocumentoAnonimizado(base: string, tamanho: 11 | 14): string {
+  const seed = [...base].reduce((acc, char) => {
+    return (acc * 31 + char.charCodeAt(0)) % 10 ** Math.min(tamanho, 9);
+  }, 7);
+
+  return String(10 ** tamanho + seed).slice(-tamanho);
+}
+
 export const clienteService = {
   async listar(filtros: ClienteFiltros = {}) {
     return clienteRepository.listar(filtros);
@@ -46,7 +54,15 @@ export const clienteService = {
     id: string,
     dados: ClienteUpdate | Prisma.ClienteUncheckedUpdateInput,
   ) {
-    await this.buscarPorId(id);
+    const cliente = await this.buscarPorId(id);
+
+    if (cliente.anonimizadoEm) {
+      throw new ConflictError(
+        "CLIENTE_ANONIMIZADO",
+        "Cliente anonimizado nao pode ter dados criticos alterados.",
+      );
+    }
+
     return clienteRepository.atualizar(id, dados);
   },
 
@@ -65,17 +81,38 @@ export const clienteService = {
   },
 
   async excluir(id: string) {
-    await this.buscarPorId(id);
+    const cliente = await this.buscarPorId(id);
     const totalAtendimentos = await clienteRepository.contarAtendimentos(id);
 
-    if (totalAtendimentos > 0) {
-      throw new ConflictError(
-        "EM_USO",
-        "Cliente possui atendimentos vinculados e não pode ser excluído.",
-      );
+    if (totalAtendimentos === 0) {
+      await clienteRepository.excluir(id);
+      return { modo: "EXCLUIDO" as const };
     }
 
-    return clienteRepository.excluir(id);
+    const tamanhoDocumento = cliente.cpfCnpj.length > 11 ? 14 : 11;
+    const cpfCnpjAnonimizado = gerarDocumentoAnonimizado(id, tamanhoDocumento);
+    const emailAnonimo = `anonimo+${id}@anonimo.local`;
+
+    await clienteRepository.atualizar(id, {
+      nome: `Cliente removido ${id.slice(-6)}`,
+      cpfCnpj: cpfCnpjAnonimizado,
+      rgIe: null,
+      telefone: "0000000000",
+      telefoneSec: null,
+      email: emailAnonimo,
+      cep: null,
+      logradouro: null,
+      numero: null,
+      complemento: null,
+      bairro: null,
+      cidade: null,
+      estado: null,
+      ativo: false,
+      observacoes: "Cadastro anonimizado por possuir atendimentos vinculados.",
+      anonimizadoEm: new Date(),
+    });
+
+    return { modo: "ANONIMIZADO" as const };
   },
 
   async deletar(id: string) {

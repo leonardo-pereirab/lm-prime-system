@@ -64,7 +64,12 @@ export const usuarioRepository = {
   },
 
   buscarComSenhaPorEmail(email: string) {
-    return prisma.usuario.findUnique({ where: { email } });
+    return prisma.usuario.findUnique({
+      where: { email },
+      include: {
+        funcionario: true,
+      },
+    });
   },
 
   criar(dados: Prisma.UsuarioCreateInput | Prisma.UsuarioUncheckedCreateInput) {

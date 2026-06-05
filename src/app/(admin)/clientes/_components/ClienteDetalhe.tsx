@@ -91,12 +91,16 @@ export default function ClienteDetalhe({
       <PageHeader title={cliente.nome}>
         <div className="mt-2 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Badge variant={cliente.ativo ? "secondary" : "outline"}>
-              {cliente.ativo ? "Ativo" : "Inativo"}
-            </Badge>
+            {cliente.anonimizadoEm ? (
+              <Badge variant="destructive">Anonimizado</Badge>
+            ) : (
+              <Badge variant={cliente.ativo ? "secondary" : "outline"}>
+                {cliente.ativo ? "Ativo" : "Inativo"}
+              </Badge>
+            )}
             <p className="text-sm text-muted-foreground">ID: {cliente.id}</p>
           </div>
-          {modoEdicao ? (
+          {cliente.anonimizadoEm ? null : modoEdicao ? (
             <Button
               type="button"
               variant="outline"
@@ -112,7 +116,18 @@ export default function ClienteDetalhe({
         </div>
       </PageHeader>
 
-      {modoEdicao ? (
+      {cliente.anonimizadoEm ? (
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-sm text-muted-foreground">
+              Este cadastro foi anonimizado para preservar o historico de
+              atendimentos vinculados.
+            </p>
+          </CardContent>
+        </Card>
+      ) : null}
+
+      {modoEdicao && !cliente.anonimizadoEm ? (
         <ClienteForm
           modo="editar"
           valoresIniciais={mapearValoresIniciais(cliente)}

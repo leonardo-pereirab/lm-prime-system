@@ -34,6 +34,7 @@ const itensPrincipais: ItemNavegacao[] = [
 ];
 
 const itensCadastros = [
+  { href: "/cadastros/funcionarios", label: "Funcionarios" },
   { href: "/cadastros/motoristas", label: "Motoristas" },
   { href: "/cadastros/veiculos", label: "Veiculos" },
   { href: "/cadastros/parceiros", label: "Parceiros" },

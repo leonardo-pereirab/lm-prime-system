@@ -28,7 +28,6 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
   return ok(async () => {
     await requireSession(request);
     const { id } = await params;
-    await clienteService.excluir(id);
-    return { removido: true };
+    return clienteService.excluir(id);
   });
 }

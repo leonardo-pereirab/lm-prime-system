@@ -50,8 +50,9 @@ export async function ativarCliente(id: string) {
 export async function excluirCliente(id: string) {
   return actionResult(async () => {
     await requireSession();
-    await clienteService.excluir(id);
+    const resultado = await clienteService.excluir(id);
     revalidatePath("/clientes");
-    return { removido: true };
+    revalidatePath(`/clientes/${id}`);
+    return resultado;
   });
 }
