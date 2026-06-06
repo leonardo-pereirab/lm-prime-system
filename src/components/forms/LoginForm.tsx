@@ -1,6 +1,8 @@
 "use client";
 
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -20,6 +22,7 @@ import { loginInputSchema, type LoginInput } from "@/schemas/auth";
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [senhaVisivel, setSenhaVisivel] = useState(false);
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginInputSchema),
     mode: "onBlur",
@@ -109,13 +112,31 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input
-                  type="password"
-                  placeholder="••••••••"
-                  autoComplete="current-password"
-                  disabled={form.formState.isSubmitting}
-                  {...field}
-                />
+                <div className="relative">
+                  <Input
+                    type={senhaVisivel ? "text" : "password"}
+                    placeholder="••••••••"
+                    autoComplete="current-password"
+                    disabled={form.formState.isSubmitting}
+                    className="pr-10"
+                    {...field}
+                  />
+                  <button
+                    type="button"
+                    aria-label={
+                      senhaVisivel ? "Ocultar senha" : "Mostrar senha"
+                    }
+                    onClick={() => setSenhaVisivel((atual) => !atual)}
+                    disabled={form.formState.isSubmitting}
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground"
+                  >
+                    {senhaVisivel ? (
+                      <EyeOffIcon className="size-4" />
+                    ) : (
+                      <EyeIcon className="size-4" />
+                    )}
+                  </button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

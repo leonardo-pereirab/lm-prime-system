@@ -29,10 +29,17 @@ export const usuarioService = {
   async autenticar(email: string, senha: string) {
     const usuario = await usuarioRepository.buscarComSenhaPorEmail(email);
 
-    if (!usuario || !usuario.ativo) {
+    if (!usuario) {
       throw new UnauthorizedError(
         "CREDENCIAIS_INVALIDAS",
         "Credenciais inválidas.",
+      );
+    }
+
+    if (!usuario.ativo) {
+      throw new UnauthorizedError(
+        "CONTA_INATIVA",
+        "Conta inativa. Contate um gerente para reativacao.",
       );
     }
 
@@ -42,6 +49,20 @@ export const usuarioService = {
       throw new UnauthorizedError(
         "CREDENCIAIS_INVALIDAS",
         "Credenciais inválidas.",
+      );
+    }
+
+    if (!usuario.funcionario) {
+      throw new UnauthorizedError(
+        "ACESSO_BLOQUEADO",
+        "Conta indisponivel para acesso.",
+      );
+    }
+
+    if (usuario.funcionario.estado !== "ATIVO") {
+      throw new UnauthorizedError(
+        "CONTA_INATIVA",
+        "Conta inativa. Contate um gerente para reativacao.",
       );
     }
 

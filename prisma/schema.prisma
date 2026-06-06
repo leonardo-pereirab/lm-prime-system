@@ -1,6 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+// Esse é o meu arquivo de esquema do Prisma, onde defino os modelos de dadoss e suas relações. Cada modelo aqui representa uma tabela no banco de dados, e cada campo representa uma coluna. As relações entre os modelos são definidas usando a sintaxe de relacionamento do Prisma. Se quiser saber mais sobre como funciona o arquivo de esquema, pode acessar a documentação oficial do Prisma: https://pris.ly/d/prisma-schema
+// Para mais info sobre o Prisma na documentação ofical: https://pris.ly/d/prisma-schema
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,6 +16,17 @@ datasource db {
 
 enum PerfilUsuario {
   ADMIN
+  ATENDENTE
+}
+
+enum EstadoFuncionario {
+  CONVIDADO
+  ATIVO
+  INATIVO
+}
+
+enum ClassificacaoFuncionario {
+  GERENTE
   ATENDENTE
 }
 
@@ -80,8 +90,40 @@ model Usuario {
   atendimentosCriados    Atendimento[] @relation("AtendimentoCriadoPor")
   atendimentosCancelados Atendimento[] @relation("AtendimentoCanceladoPor")
   contratosGerados       Contrato[]
+  funcionario            Funcionario?
 
   @@map("usuarios")
+}
+
+model Funcionario {
+  id                 String                   @id @default(cuid())
+  usuarioId          String?                  @unique
+  estado             EstadoFuncionario        @default(CONVIDADO)
+  classificacao      ClassificacaoFuncionario @default(ATENDENTE)
+  matricula          String                   @unique
+  nomeCompleto       String
+  emailCorporativo   String                   @unique
+  cpf                String                   @unique
+  telefonePrincipal  String
+  telefoneAdicional  String?
+  cep                String
+  logradouro         String
+  numero             String
+  complemento        String?
+  bairro             String
+  cidade             String
+  estadoUf           String
+  aceitouTermosEm    DateTime?
+  versaoTermosAceita String?
+  anonimizadoEm      DateTime?
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+
+  usuario Usuario? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+
+  @@index([estado])
+  @@index([classificacao])
+  @@map("funcionarios")
 }
 
 // ─────────────────────────────────────────
@@ -89,24 +131,25 @@ model Usuario {
 // ─────────────────────────────────────────
 
 model Cliente {
-  id          String   @id @default(cuid())
-  nome        String
-  cpfCnpj     String   @unique
-  rgIe        String?
-  telefone    String
-  telefoneSec String?
-  email       String?
-  cep         String?
-  logradouro  String?
-  numero      String?
-  complemento String?
-  bairro      String?
-  cidade      String?
-  estado      String?
-  ativo       Boolean  @default(true)
-  observacoes String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String    @id @default(cuid())
+  nome          String
+  cpfCnpj       String    @unique
+  rgIe          String?
+  telefone      String
+  telefoneSec   String?
+  email         String?
+  cep           String?
+  logradouro    String?
+  numero        String?
+  complemento   String?
+  bairro        String?
+  cidade        String?
+  estado        String?
+  ativo         Boolean   @default(true)
+  anonimizadoEm DateTime?
+  observacoes   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   atendimentos Atendimento[]
 

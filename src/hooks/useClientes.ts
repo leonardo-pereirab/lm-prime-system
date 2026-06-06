@@ -18,6 +18,7 @@ export type ClienteListagemItem = {
   cidade: string | null;
   estado: string | null;
   ativo: boolean;
+  anonimizadoEm: string | null;
   createdAt: string;
 };
 
@@ -37,9 +38,14 @@ export type ClienteDetalhe = {
   cidade: string | null;
   estado: string | null;
   ativo: boolean;
+  anonimizadoEm: string | null;
   observacoes: string | null;
   createdAt: string;
   updatedAt: string;
+};
+
+export type ClienteExclusaoResultado = {
+  modo: "EXCLUIDO" | "ANONIMIZADO";
 };
 
 export type ClienteResumoAtendimento = {
@@ -155,7 +161,7 @@ export function useExcluirCliente() {
 
   return useMutation({
     mutationFn: (id: string) =>
-      requestJson(`/api/clientes/${id}`, {
+      requestJson<ClienteExclusaoResultado>(`/api/clientes/${id}`, {
         method: "DELETE",
       }),
     onSuccess: () => {

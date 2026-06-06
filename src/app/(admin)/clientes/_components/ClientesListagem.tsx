@@ -81,7 +81,6 @@ export default function ClientesListagem() {
   );
   const [clienteSelecionado, setClienteSelecionado] =
     useState<ClienteListagemItem | null>(null);
-  const [mostrarDialogoEmUso, setMostrarDialogoEmUso] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -146,31 +145,15 @@ export default function ClientesListagem() {
 
     const resposta = await excluirCliente(id);
     if (!resposta.success) {
-      if (resposta.error.code === "EM_USO") {
-        setMostrarDialogoEmUso(true);
-        return;
-      }
       toast.error(resposta.error.message);
       return;
     }
 
-    toast.success("Cliente excluido com sucesso.");
-    await refetch();
-  }
-
-  async function desativarAposBloqueioExclusao() {
-    if (!clienteSelecionado) {
-      return;
-    }
-
-    const resposta = await desativarCliente(clienteSelecionado.id);
-    if (!resposta.success) {
-      toast.error(resposta.error.message);
-      return;
-    }
-
-    toast.success("Cliente desativado com sucesso.");
-    setMostrarDialogoEmUso(false);
+    toast.success(
+      resposta.data.modo === "EXCLUIDO"
+        ? "Cliente excluido com sucesso."
+        : "Cliente anonimizado com sucesso.",
+    );
     fecharConfirmacao();
     await refetch();
   }
@@ -288,11 +271,15 @@ export default function ClientesListagem() {
                       </TableCell>
                       <TableCell>{cidadeUf(cliente)}</TableCell>
                       <TableCell>
-                        <Badge
-                          variant={cliente.ativo ? "secondary" : "outline"}
-                        >
-                          {cliente.ativo ? "Ativo" : "Inativo"}
-                        </Badge>
+                        {cliente.anonimizadoEm ? (
+                          <Badge variant="destructive">Anonimizado</Badge>
+                        ) : (
+                          <Badge
+                            variant={cliente.ativo ? "secondary" : "outline"}
+                          >
+                            {cliente.ativo ? "Ativo" : "Inativo"}
+                          </Badge>
+                        )}
                       </TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
@@ -404,7 +391,7 @@ export default function ClientesListagem() {
             ? "O cliente deixara de aparecer nas listagens padrao e seletores de novas etapas."
             : acaoPendente === "ativar"
               ? "O cliente voltara a aparecer nas listagens e seletores padrao."
-              : "Esta acao remove o cliente definitivamente quando nao houver atendimentos vinculados."
+              : "Sem atendimentos vinculados, o cliente sera excluido. Caso contrario, os dados serao anonimizados para preservar o historico."
         }
         textoConfirmar={
           acaoPendente === "desativar"
@@ -417,21 +404,6 @@ export default function ClientesListagem() {
           acaoPendente === "excluir" ? "destructive" : "default"
         }
         onConfirmar={executarAcaoConfirmada}
-      />
-
-      <ConfirmDialog
-        aberto={mostrarDialogoEmUso}
-        onAbertoChange={(aberto) => {
-          setMostrarDialogoEmUso(aberto);
-          if (!aberto) {
-            fecharConfirmacao();
-          }
-        }}
-        titulo="Cliente em uso"
-        descricao="Este cliente possui atendimentos vinculados e nao pode ser excluido. Deseja desativar o cadastro em vez de excluir?"
-        textoConfirmar="Desativar cliente"
-        textoCancelar="Fechar"
-        onConfirmar={desativarAposBloqueioExclusao}
       />
     </div>
   );
