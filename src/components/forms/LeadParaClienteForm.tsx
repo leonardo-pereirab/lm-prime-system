@@ -141,7 +141,7 @@ export default function LeadParaClienteForm<
           name={"novoCliente.telefoneSec" as FieldPath<TValores>}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Telefone secundario</FormLabel>
+              <FormLabel>Telefone secundário</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Opcional"

@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const esperado = `Bearer ${process.env.CRON_SECRET ?? ""}`;
 
     if (!process.env.CRON_SECRET || auth !== esperado) {
-      throw new UnauthorizedError("CRON_UNAUTHORIZED", "Nao autorizado.");
+      throw new UnauthorizedError("CRON_UNAUTHORIZED", "Não autorizado.");
     }
 
     const resultado = await orcamentoService.cancelarVencidos();

@@ -10,7 +10,7 @@ export async function GET(_: Request, { params }: RouteParams) {
     const endereco = await consultarCep(cep);
 
     if (!endereco) {
-      throw new NotFoundError("CEP_NAO_ENCONTRADO", "CEP nao encontrado.");
+      throw new NotFoundError("CEP_NAO_ENCONTRADO", "CEP não encontrado.");
     }
 
     return endereco;

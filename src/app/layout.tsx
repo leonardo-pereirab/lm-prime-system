@@ -11,7 +11,7 @@ const inter = Inter({
 
 export const metadata = {
   title: "LM Prime System",
-  description: "Sistema de gestao de atendimentos e locacao de veiculos",
+  description: "Sistema de gestão de atendimentos e locação de veículos",
 };
 
 type RootLayoutProps = {

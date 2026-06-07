@@ -7,10 +7,10 @@ export default function NotFoundPage() {
     <main className="flex min-h-screen items-center justify-center p-6">
       <div className="w-full max-w-md rounded-lg border border-neutral-200 bg-white p-6 text-center shadow-sm">
         <h1 className="text-xl font-semibold text-neutral-900">
-          Pagina nao encontrada
+          Página não encontrada
         </h1>
         <p className="mt-2 text-sm text-neutral-600">
-          O endereco informado nao existe ou foi movido.
+          O endereço informado não existe ou foi movido.
         </p>
 
         <div className="mt-6 flex items-center justify-center gap-3">

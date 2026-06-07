@@ -78,7 +78,7 @@ export default function LoginForm() {
       router.replace(destino);
       router.refresh();
     } catch {
-      toast.error("Erro de conexao. Tente novamente.");
+      toast.error("Erro de conexão. Tente novamente.");
     }
   }
 

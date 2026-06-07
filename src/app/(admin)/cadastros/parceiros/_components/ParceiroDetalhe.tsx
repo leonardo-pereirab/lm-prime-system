@@ -105,7 +105,7 @@ export default function ParceiroDetalhe({
         <ParceiroForm
           modo="editar"
           valoresIniciais={mapearValoresIniciais(parceiro)}
-          textoBotaoSalvar="Salvar alteracoes"
+          textoBotaoSalvar="Salvar alterações"
           onCancelar={() => setModoEdicao(false)}
           onSubmit={(payload) => atualizarParceiro(id, payload)}
           onSucesso={async () => {
@@ -155,7 +155,7 @@ export default function ParceiroDetalhe({
 
           <Card>
             <CardHeader>
-              <CardTitle>Endereco</CardTitle>
+              <CardTitle>Endereço</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <div>
@@ -166,7 +166,7 @@ export default function ParceiroDetalhe({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">
-                  Endereco completo
+                  Endereço completo
                 </p>
                 <p className="text-sm">{endereco || "-"}</p>
               </div>
@@ -175,7 +175,7 @@ export default function ParceiroDetalhe({
 
           <Card className="lg:col-span-2">
             <CardHeader>
-              <CardTitle>Observacoes</CardTitle>
+              <CardTitle>Observações</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm">{textoOuTraco(parceiro.observacoes)}</p>

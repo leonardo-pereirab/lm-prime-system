@@ -151,7 +151,7 @@ export default function ClientesListagem() {
 
     toast.success(
       resposta.data.modo === "EXCLUIDO"
-        ? "Cliente excluido com sucesso."
+        ? "Cliente excluído com sucesso."
         : "Cliente anonimizado com sucesso.",
     );
     fecharConfirmacao();
@@ -163,7 +163,7 @@ export default function ClientesListagem() {
       <PageHeader title="Clientes">
         <div className="mt-2 flex items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
-            Gerencie os clientes cadastrados da operacao.
+            Gerencie os clientes cadastrados da operação.
           </p>
           <Button asChild>
             <Link href="/clientes/novo">
@@ -256,7 +256,7 @@ export default function ClientesListagem() {
                     <TableHead>Telefone</TableHead>
                     <TableHead>Cidade/UF</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead className="w-12 text-right">Acoes</TableHead>
+                    <TableHead className="w-12 text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -287,7 +287,7 @@ export default function ClientesListagem() {
                             <Button
                               variant="ghost"
                               size="icon-sm"
-                              aria-label="Acoes"
+                              aria-label="Ações"
                             >
                               <MoreHorizontalIcon className="size-4" />
                             </Button>
@@ -352,7 +352,7 @@ export default function ClientesListagem() {
                     Anterior
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    Pagina {pagina} de {totalPaginas}
+                    Página {pagina} de {totalPaginas}
                   </span>
                   <Button
                     type="button"
@@ -388,10 +388,10 @@ export default function ClientesListagem() {
         }
         descricao={
           acaoPendente === "desativar"
-            ? "O cliente deixara de aparecer nas listagens padrao e seletores de novas etapas."
+            ? "O cliente deixará de aparecer nas listagens padrão e seletores de novas etapas."
             : acaoPendente === "ativar"
-              ? "O cliente voltara a aparecer nas listagens e seletores padrao."
-              : "Sem atendimentos vinculados, o cliente sera excluido. Caso contrario, os dados serao anonimizados para preservar o historico."
+              ? "O cliente voltará a aparecer nas listagens e seletores padrão."
+              : "Sem atendimentos vinculados, o cliente será excluído. Caso contrário, os dados serão anonimizados para preservar o histórico."
         }
         textoConfirmar={
           acaoPendente === "desativar"

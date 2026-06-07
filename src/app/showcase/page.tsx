@@ -34,7 +34,7 @@ export default function ShowcasePage() {
             Showcase de componentes-base
           </h1>
           <p className="max-w-2xl text-sm text-neutral-600">
-            Pagina temporaria para validar a integracao do shadcn com os tokens
+            Página temporária para validar a integração do shadcn com os tokens
             visuais do projeto.
           </p>
         </div>
@@ -75,7 +75,7 @@ export default function ShowcasePage() {
       <Dialog open={aberto} onOpenChange={setAberto}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Confirmacao visual</DialogTitle>
+            <DialogTitle>Confirmação visual</DialogTitle>
             <DialogDescription>
               Este dialog existe apenas para validar espacos, bordas, foco e
               tipografia da base UI.

@@ -155,7 +155,7 @@ export default function ParceirosListagem() {
       return;
     }
 
-    toast.success("Parceiro excluido com sucesso.");
+    toast.success("Parceiro excluído com sucesso.");
     await refetch();
   }
 
@@ -182,7 +182,7 @@ export default function ParceirosListagem() {
         <div className="mt-2 flex items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
             Gerencie as empresas terceirizadas cadastradas para apoio na
-            operacao.
+            operação.
           </p>
           <Button asChild>
             <Link href="/cadastros/parceiros/novo">
@@ -215,7 +215,7 @@ export default function ParceirosListagem() {
               className="text-sm font-medium"
               htmlFor="ordenacao-parceiros"
             >
-              Ordenacao
+              Ordenação
             </label>
             <Select
               value={ordenarPor}
@@ -280,7 +280,7 @@ export default function ParceirosListagem() {
                     <TableHead>Telefone</TableHead>
                     <TableHead>Cidade/UF</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead className="w-12 text-right">Acoes</TableHead>
+                    <TableHead className="w-12 text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -307,7 +307,7 @@ export default function ParceirosListagem() {
                             <Button
                               variant="ghost"
                               size="icon-sm"
-                              aria-label="Acoes"
+                              aria-label="Ações"
                             >
                               <MoreHorizontalIcon className="size-4" />
                             </Button>
@@ -378,7 +378,7 @@ export default function ParceirosListagem() {
                     Anterior
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    Pagina {pagina} de {totalPaginas}
+                    Página {pagina} de {totalPaginas}
                   </span>
                   <Button
                     type="button"
@@ -389,7 +389,7 @@ export default function ParceirosListagem() {
                       setPagina((atual) => Math.min(totalPaginas, atual + 1))
                     }
                   >
-                    Proxima
+                    Próxima
                   </Button>
                 </div>
               </div>
@@ -414,10 +414,10 @@ export default function ParceirosListagem() {
         }
         descricao={
           acaoPendente === "desativar"
-            ? "O parceiro deixara de aparecer nos seletores padrao das proximas escalas."
+            ? "O parceiro deixará de aparecer nos seletores padrão das próximas escalas."
             : acaoPendente === "ativar"
-              ? "O parceiro voltara a aparecer nos seletores padrao das escalas."
-              : "Esta acao remove o parceiro definitivamente quando nao houver atendimentos vinculados."
+              ? "O parceiro voltará a aparecer nos seletores padrão das escalas."
+              : "Esta ação remove o parceiro definitivamente quando não houver atendimentos vinculados."
         }
         textoConfirmar={
           acaoPendente === "desativar"
@@ -441,7 +441,7 @@ export default function ParceirosListagem() {
           }
         }}
         titulo="Parceiro em uso"
-        descricao="Este parceiro possui atendimentos vinculados e nao pode ser excluido. Deseja desativar o cadastro em vez de excluir?"
+        descricao="Este parceiro possui atendimentos vinculados e não pode ser excluído. Deseja desativar o cadastro em vez de excluir?"
         textoConfirmar="Desativar parceiro"
         textoCancelar="Fechar"
         onConfirmar={desativarAposBloqueioExclusao}

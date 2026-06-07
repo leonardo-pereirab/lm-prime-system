@@ -16,7 +16,7 @@ export function EtapaBloqueadaToast() {
     }
 
     if (aviso === "etapa-bloqueada") {
-      toast.info("Etapa ainda nao disponivel para o status atual.");
+      toast.info("Etapa ainda não disponível para o status atual.");
     }
 
     ultimoAviso.current = aviso;

@@ -5,7 +5,7 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
 
   return (
     <div>
-      <h1>Orcamento #{id}</h1>
+      <h1>Orçamento #{id}</h1>
     </div>
   );
 }

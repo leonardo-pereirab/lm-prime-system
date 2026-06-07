@@ -65,10 +65,10 @@ const STATUS_OPCOES = Object.entries(STATUS_LABELS) as Array<
 
 const TIPO_SERVICO_LABELS: Record<TipoServico, string> = {
   VIAGEM: "Viagem",
-  EXCURSAO: "Excursao",
+  EXCURSAO: "Excursão",
   PASSEIO: "Passeio",
   FEIRA: "Feira",
-  CONVENCAO: "Convencao",
+  CONVENCAO: "Convenção",
   CASAMENTO: "Casamento",
   TRANSFERE: "Transfere",
   OUTRO: "Outro",
@@ -134,10 +134,10 @@ function DateRangePicker({
 }) {
   const descricao =
     valor?.from && valor?.to
-      ? `${formatarData(valor.from)} ate ${formatarData(valor.to)}`
+      ? `${formatarData(valor.from)} até ${formatarData(valor.to)}`
       : valor?.from
-        ? `${formatarData(valor.from)} ate ...`
-        : "Selecionar periodo";
+        ? `${formatarData(valor.from)} até ...`
+        : "Selecionar período";
 
   return (
     <Popover>
@@ -168,7 +168,7 @@ function DateRangePicker({
             size="sm"
             onClick={() => onChange(undefined)}
           >
-            Limpar periodo
+            Limpar período
           </Button>
         </div>
       </PopoverContent>
@@ -314,8 +314,8 @@ export default function AtendimentosListagem() {
       <PageHeader title="Atendimentos">
         <div className="mt-2 flex items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
-            Acompanhe o funil operacional desde a solicitacao ate a execucao do
-            servico.
+            Acompanhe o funíl operacional desde a solicitação até a execução do
+            serviço.
           </p>
           <Button asChild>
             <Link href="/atendimentos/novo">
@@ -340,7 +340,7 @@ export default function AtendimentosListagem() {
               <Input
                 id="busca-atendimentos"
                 className="pl-8"
-                placeholder="Buscar por codigo, cliente ou lead"
+                placeholder="Buscar por código, cliente ou lead"
                 value={buscaDigitada}
                 onChange={(event) => setBuscaDigitada(event.target.value)}
               />
@@ -387,7 +387,7 @@ export default function AtendimentosListagem() {
           </div>
 
           <div className="space-y-2 lg:col-span-2">
-            <label className="text-sm font-medium">Periodo do servico</label>
+            <label className="text-sm font-medium">Período do serviço</label>
             <DateRangePicker
               valor={periodo}
               onChange={(valor) => {
@@ -426,13 +426,13 @@ export default function AtendimentosListagem() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Codigo</TableHead>
+                    <TableHead>Código</TableHead>
                     <TableHead>Cliente/Lead</TableHead>
-                    <TableHead>Tipo de servico</TableHead>
-                    <TableHead>Data do servico</TableHead>
+                    <TableHead>Tipo de serviço</TableHead>
+                    <TableHead>Data do serviço</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Criado em</TableHead>
-                    <TableHead className="w-20 text-right">Acoes</TableHead>
+                    <TableHead className="w-20 text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -469,7 +469,7 @@ export default function AtendimentosListagem() {
                       <TableCell>
                         {atendimento.dataServico
                           ? formatarData(atendimento.dataServico)
-                          : "Nao definida"}
+                          : "Não definida"}
                       </TableCell>
                       <TableCell>
                         <StatusAtendimentoBadge status={atendimento.status} />
@@ -511,7 +511,7 @@ export default function AtendimentosListagem() {
                     Anterior
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    Pagina {pagina} de {totalPaginas}
+                    Página {pagina} de {totalPaginas}
                   </span>
                   <Button
                     type="button"
@@ -522,7 +522,7 @@ export default function AtendimentosListagem() {
                       setPagina((atual) => Math.min(totalPaginas, atual + 1))
                     }
                   >
-                    Proxima
+                    Próxima
                   </Button>
                 </div>
               </div>

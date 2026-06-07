@@ -120,7 +120,7 @@ export default function ClienteDetalhe({
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground">
-              Este cadastro foi anonimizado para preservar o historico de
+              Este cadastro foi anonimizado para preservar o histórico de
               atendimentos vinculados.
             </p>
           </CardContent>
@@ -131,7 +131,7 @@ export default function ClienteDetalhe({
         <ClienteForm
           modo="editar"
           valoresIniciais={mapearValoresIniciais(cliente)}
-          textoBotaoSalvar="Salvar alteracoes"
+          textoBotaoSalvar="Salvar alterações"
           onCancelar={() => setModoEdicao(false)}
           onSubmit={(payload) => atualizarCliente(id, payload)}
           onSucesso={async () => {
@@ -185,7 +185,7 @@ export default function ClienteDetalhe({
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">
-                    Telefone secundario
+                    Telefone secundário
                   </p>
                   <p className="text-sm">
                     {cliente.telefoneSec
@@ -202,7 +202,7 @@ export default function ClienteDetalhe({
 
             <Card>
               <CardHeader>
-                <CardTitle>Endereco</CardTitle>
+                <CardTitle>Endereço</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <div>
@@ -213,7 +213,7 @@ export default function ClienteDetalhe({
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">
-                    Endereco completo
+                    Endereço completo
                   </p>
                   <p className="text-sm">{endereco || "-"}</p>
                 </div>
@@ -222,7 +222,7 @@ export default function ClienteDetalhe({
 
             <Card>
               <CardHeader>
-                <CardTitle>Observacoes</CardTitle>
+                <CardTitle>Observações</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm">{textoOuTraco(cliente.observacoes)}</p>

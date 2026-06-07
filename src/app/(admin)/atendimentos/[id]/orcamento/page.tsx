@@ -16,7 +16,7 @@ export default async function AtendimentoOrcamentoPage({ params }: PageProps) {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Orcamento">
+      <PageHeader title="Orçamento">
         <p className="mt-2 text-sm text-muted-foreground">
           Atendimento: {atendimento.codigo ?? atendimento.id}
         </p>
@@ -24,23 +24,23 @@ export default async function AtendimentoOrcamentoPage({ params }: PageProps) {
 
       <details className="rounded-lg border bg-card p-4">
         <summary className="cursor-pointer text-sm font-semibold">
-          Resumo da solicitacao
+          Resumo da solicitação
         </summary>
         <div className="mt-3 grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
           <p>
             Contato:{" "}
             {atendimento.cliente?.nome ??
               atendimento.leadNome ??
-              "Nao informado"}
+              "Não informado"}
           </p>
-          <p>Tipo de servico: {atendimento.tipoServico}</p>
+          <p>Tipo de serviço: {atendimento.tipoServico}</p>
           <p>Passageiros: {atendimento.qtdPassageiros}</p>
           <p>Data de contato: {formatarData(atendimento.dataContato)}</p>
           <p>
-            Data do servico:{" "}
+            Data do serviço:{" "}
             {atendimento.dataServico
               ? formatarData(atendimento.dataServico)
-              : "Nao definida"}
+              : "Não definida"}
           </p>
         </div>
       </details>

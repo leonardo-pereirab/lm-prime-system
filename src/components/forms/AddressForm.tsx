@@ -119,9 +119,9 @@ export function AddressForm<TValores extends FieldValues>({
         name={campos.numero}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Numero</FormLabel>
+            <FormLabel>Número</FormLabel>
             <FormControl>
-              <Input placeholder="Numero" {...field} />
+              <Input placeholder="Número" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

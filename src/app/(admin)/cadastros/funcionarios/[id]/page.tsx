@@ -136,7 +136,7 @@ export default function FuncionarioDetalhePage() {
 
         const mensagem =
           resposta.data.modo === "EXCLUIDO"
-            ? "Funcionario excluido com sucesso."
+            ? "Funcionário excluído com sucesso."
             : "Funcionario anonimizado com sucesso.";
 
         toast.success(mensagem);
@@ -158,7 +158,7 @@ export default function FuncionarioDetalhePage() {
   if (!data) {
     return (
       <div className="space-y-4">
-        <p className="text-sm text-destructive">Funcionario nao encontrado.</p>
+        <p className="text-sm text-destructive">Funcionário não encontrado.</p>
         <Button asChild variant="outline">
           <Link href="/cadastros/funcionarios">Voltar para listagem</Link>
         </Button>
@@ -171,7 +171,7 @@ export default function FuncionarioDetalhePage() {
       <PageHeader title="Editar funcionario">
         <div className="mt-2 flex items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
-            Matricula {data.matricula} • Estado {labelEstado(data.estado)}
+            Matrícula {data.matricula} • Estado {labelEstado(data.estado)}
           </p>
           <div className="flex items-center gap-2">
             <Badge variant="outline">
@@ -269,7 +269,7 @@ export default function FuncionarioDetalhePage() {
                   <FormItem>
                     <FormLabel>CPF</FormLabel>
                     <FormControl>
-                      <Input placeholder="Somente digitos" {...field} />
+                      <Input placeholder="Somente dígitos" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -283,7 +283,7 @@ export default function FuncionarioDetalhePage() {
                   <FormItem>
                     <FormLabel>Telefone principal</FormLabel>
                     <FormControl>
-                      <Input placeholder="Somente digitos" {...field} />
+                      <Input placeholder="Somente dígitos" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -295,7 +295,7 @@ export default function FuncionarioDetalhePage() {
                 name="classificacao"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Classificacao</FormLabel>
+                    <FormLabel>Classificação</FormLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <FormControl>
                         <SelectTrigger>
@@ -383,9 +383,9 @@ export default function FuncionarioDetalhePage() {
                 name="numero"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Numero</FormLabel>
+                    <FormLabel>Número</FormLabel>
                     <FormControl>
-                      <Input placeholder="Numero" {...field} />
+                      <Input placeholder="Número" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -455,7 +455,7 @@ export default function FuncionarioDetalhePage() {
                 >
                   {form.formState.isSubmitting
                     ? "Salvando..."
-                    : "Salvar alteracoes"}
+                    : "Salvar alterações"}
                 </Button>
               </div>
             </form>
@@ -482,7 +482,7 @@ export default function FuncionarioDetalhePage() {
             ? "Deseja ativar este funcionario e liberar acesso ao sistema?"
             : acaoPendente === "inativar"
               ? "Deseja inativar este funcionario e bloquear novos logins?"
-              : "Se for convidado sem uso, sera excluido. Caso contrario, os dados serao anonimizados."
+              : "Se for convidado sem uso, será excluído. Caso contrário, os dados serão anonimizados."
         }
         textoConfirmar={
           acaoPendente === "ativar"

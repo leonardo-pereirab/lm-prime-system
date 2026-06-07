@@ -236,7 +236,7 @@ export default function ClienteForm({
                     <FormLabel>Telefone principal</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Somente numeros"
+                        placeholder="Somente números"
                         inputMode="numeric"
                         value={field.value}
                         onBlur={field.onBlur}
@@ -257,7 +257,7 @@ export default function ClienteForm({
                 name="telefoneSec"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Telefone secundario</FormLabel>
+                    <FormLabel>Telefone secundário</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Opcional"
@@ -304,7 +304,7 @@ export default function ClienteForm({
         </Card>
 
         <Card>
-          <CardHeader>{renderTituloSecao("endereco", "Endereco")}</CardHeader>
+          <CardHeader>{renderTituloSecao("endereco", "Endereço")}</CardHeader>
           {secoesAbertas.endereco && (
             <CardContent>
               <AddressForm
@@ -319,7 +319,7 @@ export default function ClienteForm({
 
         <Card>
           <CardHeader>
-            {renderTituloSecao("observacoes", "Observacoes")}
+            {renderTituloSecao("observacoes", "Observações")}
           </CardHeader>
           {secoesAbertas.observacoes && (
             <CardContent>
@@ -328,11 +328,11 @@ export default function ClienteForm({
                 name="observacoes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Observacoes</FormLabel>
+                    <FormLabel>Observações</FormLabel>
                     <FormControl>
                       <Textarea
                         rows={4}
-                        placeholder="Informacoes adicionais"
+                        placeholder="Informações adicionais"
                         value={field.value ?? ""}
                         onChange={field.onChange}
                         onBlur={field.onBlur}

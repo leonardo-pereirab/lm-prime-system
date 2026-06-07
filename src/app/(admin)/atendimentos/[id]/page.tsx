@@ -29,7 +29,7 @@ export default async function AtendimentoDetalhe({ params }: PageProps) {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Visao geral do atendimento">
+      <PageHeader title="Visão geral do atendimento">
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <Badge variant="outline">
             {atendimento.codigo ?? atendimento.id}
@@ -40,7 +40,7 @@ export default async function AtendimentoDetalhe({ params }: PageProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Resumo rapido</CardTitle>
+          <CardTitle className="text-base">Resumo rápido</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3 text-sm text-muted-foreground md:grid-cols-2">
           <p>
@@ -50,10 +50,10 @@ export default async function AtendimentoDetalhe({ params }: PageProps) {
             Cliente/lead:{" "}
             {atendimento.cliente?.nome ??
               atendimento.leadNome ??
-              "Nao informado"}
+              "Não informado"}
           </p>
-          <p>Tipo de servico: {atendimento.tipoServico}</p>
-          <p>Ultima atualizacao: {formatarDataHora(atendimento.updatedAt)}</p>
+          <p>Tipo de serviço: {atendimento.tipoServico}</p>
+          <p>Última atualização: {formatarDataHora(atendimento.updatedAt)}</p>
         </CardContent>
       </Card>
 
@@ -87,7 +87,7 @@ export default async function AtendimentoDetalhe({ params }: PageProps) {
                   </Link>
                 ) : (
                   <span className="text-sm text-muted-foreground">
-                    Indisponivel
+                    Indisponível
                   </span>
                 )}
               </div>
@@ -98,7 +98,7 @@ export default async function AtendimentoDetalhe({ params }: PageProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Proximo passo</CardTitle>
+          <CardTitle className="text-base">Próximo passo</CardTitle>
         </CardHeader>
         <CardContent>
           <Link
@@ -115,7 +115,7 @@ export default async function AtendimentoDetalhe({ params }: PageProps) {
 
 function statusEtapaTexto(status: EtapaVisualStatus) {
   if (status === "concluida") {
-    return "Concluida";
+    return "Concluída";
   }
 
   if (status === "atual") {

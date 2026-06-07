@@ -95,7 +95,7 @@ export default function AtivacaoContaForm() {
         toast.error(
           !json.success
             ? json.error.message
-            : "Dados nao reconhecidos. Insira dados ja autorizados pela empresa.",
+            : "Dados não reconhecidos. Insira dados já autorizados pela empresa.",
         );
         return;
       }
@@ -108,7 +108,7 @@ export default function AtivacaoContaForm() {
       });
       toast.success("Dados validados. Conclua seu cadastro.");
     } catch {
-      toast.error("Erro de conexao. Tente novamente.");
+      toast.error("Erro de conexão. Tente novamente.");
     }
   }
 
@@ -134,12 +134,12 @@ export default function AtivacaoContaForm() {
         toast.error(
           !json.success
             ? json.error.message
-            : "Nao foi possivel concluir ativacao.",
+            : "Não foi possível concluir ativação.",
         );
         return;
       }
 
-      toast.success("Conta ativada com sucesso. Voce ja pode fazer login.");
+      toast.success("Conta ativada com sucesso. Você já pode fazer login.");
       setDadosCriticos(null);
       formValidacao.reset();
       formConclusao.reset({
@@ -154,7 +154,7 @@ export default function AtivacaoContaForm() {
       setSenhaVisivel(false);
       setConfirmacaoVisivel(false);
     } catch {
-      toast.error("Erro de conexao. Tente novamente.");
+      toast.error("Erro de conexão. Tente novamente.");
     }
   }
 
@@ -190,7 +190,7 @@ export default function AtivacaoContaForm() {
             name="matricula"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Matricula</FormLabel>
+                <FormLabel>Matrícula</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Ex.: FUN-00001"
@@ -235,7 +235,7 @@ export default function AtivacaoContaForm() {
           <span className="font-medium">CPF:</span> {dadosCriticos.cpf}
         </p>
         <p>
-          <span className="font-medium">Matricula:</span>{" "}
+          <span className="font-medium">Matrícula:</span>{" "}
           {dadosCriticos.matricula}
         </p>
       </div>
@@ -329,7 +329,7 @@ export default function AtivacaoContaForm() {
                 <FormLabel>Telefone adicional (opcional)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Somente digitos"
+                    placeholder="Somente dígitos"
                     disabled={formConclusao.formState.isSubmitting}
                     {...field}
                   />

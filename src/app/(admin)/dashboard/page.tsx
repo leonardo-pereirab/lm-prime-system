@@ -50,7 +50,7 @@ export default async function DashboardPage({
     <div className="space-y-6">
       <PageHeader title="Dashboard">
         <p className="mt-2 text-sm text-muted-foreground">
-          Ola, {usuario.nome}. Acompanhe os principais indicadores da operacao.
+          Olá, {usuario.nome}. Acompanhe os principais indicadores da operação.
         </p>
       </PageHeader>
 
@@ -61,7 +61,7 @@ export default async function DashboardPage({
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              Registre rapidamente uma nova solicitacao.
+              Registre rapidamente uma nova solicitação.
             </p>
             <Button asChild size="lg" className="w-full">
               <Link href="/atendimentos/novo">Novo atendimento</Link>
@@ -71,14 +71,14 @@ export default async function DashboardPage({
 
         <Card>
           <CardHeader>
-            <CardTitle>Fila de orcamentos</CardTitle>
+            <CardTitle>Fila de orçamentos</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              Atendimentos aguardando proposta ou aprovacao de orcamento.
+              Atendimentos aguardando proposta ou aprovação de orçamento.
             </p>
             <Button asChild variant="outline" className="w-full">
-              <Link href="/filas/orcamentos">Abrir fila de orcamentos</Link>
+              <Link href="/filas/orcamentos">Abrir fila de orçamentos</Link>
             </Button>
           </CardContent>
         </Card>

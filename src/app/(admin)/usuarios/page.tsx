@@ -1,7 +1,7 @@
 export default function UsuariosPage() {
   return (
     <div>
-      <h1>Usuarios</h1>
+      <h1>Usuários</h1>
     </div>
   );
 }

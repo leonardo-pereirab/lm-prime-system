@@ -104,10 +104,10 @@ type SolicitacaoFormProps = {
 
 const OPCOES_TIPO_SERVICO: Array<{ value: TipoServico; label: string }> = [
   { value: TipoServico.VIAGEM, label: "Viagem" },
-  { value: TipoServico.EXCURSAO, label: "Excursao" },
+  { value: TipoServico.EXCURSAO, label: "Excursão" },
   { value: TipoServico.PASSEIO, label: "Passeio" },
   { value: TipoServico.FEIRA, label: "Feira" },
-  { value: TipoServico.CONVENCAO, label: "Convencao" },
+  { value: TipoServico.CONVENCAO, label: "Convenção" },
   { value: TipoServico.CASAMENTO, label: "Casamento" },
   { value: TipoServico.TRANSFERE, label: "Transfere" },
   { value: TipoServico.OUTRO, label: "Outro" },
@@ -300,7 +300,7 @@ function ClienteCombobox({
                     setAberto(false);
                   }}
                 >
-                  Limpar selecao
+                  Limpar seleção
                 </CommandItem>
               ) : null}
               {clientes.map((cliente) => (
@@ -431,8 +431,8 @@ export default function SolicitacaoForm({
 
     toast.success(
       modo === "criar"
-        ? "Solicitacao salva com sucesso."
-        : "Solicitacao atualizada com sucesso.",
+        ? "Solicitação salva com sucesso."
+        : "Solicitação atualizada com sucesso.",
     );
 
     if (modo === "criar") {
@@ -509,27 +509,27 @@ export default function SolicitacaoForm({
     }
 
     toast.success(
-      "Solicitacao finalizada. Atendimento enviado para orcamento.",
+      "Solicitação finalizada. Atendimento enviado para orçamento.",
     );
     router.push(`/atendimentos/${atendimentoId}/orcamento`);
   }
 
   const tituloConfirmacao: Record<AcaoSensivel, string> = {
-    salvar: "Salvar solicitacao",
+    salvar: "Salvar solicitação",
     limpar: "Limpar campos",
     cancelarESair: "Cancelar e sair",
     encerrar: "Encerrar atendimento",
-    irOrcamento: "Ir para orcamento",
+    irOrcamento: "Ir para orçamento",
   };
 
   const descricaoConfirmacao: Record<AcaoSensivel, string> = {
-    salvar: "Deseja salvar os dados da solicitacao informada?",
-    limpar: "Deseja limpar os campos do formulario?",
+    salvar: "Deseja salvar os dados da solicitação informada?",
+    limpar: "Deseja limpar os campos do formulário?",
     cancelarESair:
-      "Deseja cancelar a criacao e voltar para a listagem de atendimentos?",
+      "Deseja cancelar a criação e voltar para a listagem de atendimentos?",
     encerrar:
-      "Deseja encerrar este atendimento? O historico da solicitacao sera mantido.",
-    irOrcamento: "Deseja concluir esta etapa e avancar para o orcamento?",
+      "Deseja encerrar este atendimento? O histórico da solicitação será mantido.",
+    irOrcamento: "Deseja concluir esta etapa e avançar para o orçamento?",
   };
 
   return (
@@ -538,7 +538,7 @@ export default function SolicitacaoForm({
         <form className="space-y-4" onSubmit={form.handleSubmit(salvar)}>
           <Card>
             <CardHeader>
-              <CardTitle>Solicitacao</CardTitle>
+              <CardTitle>Solicitação</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-2">
               <FormField
@@ -656,7 +656,7 @@ export default function SolicitacaoForm({
                         <FormLabel>Telefone do lead</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Somente numeros"
+                            placeholder="Somente números"
                             inputMode="numeric"
                             value={field.value ?? ""}
                             onBlur={field.onBlur}
@@ -685,7 +685,7 @@ export default function SolicitacaoForm({
                 name="tipoServico"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tipo de servico</FormLabel>
+                    <FormLabel>Tipo de serviço</FormLabel>
                     <Select
                       value={field.value}
                       onValueChange={field.onChange}
@@ -746,7 +746,7 @@ export default function SolicitacaoForm({
                 name="dataServico"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Data do servico</FormLabel>
+                    <FormLabel>Data do serviço</FormLabel>
                     <FormControl>
                       <DateInputBr
                         value={formatarDataBr(field.value)}
@@ -781,7 +781,7 @@ export default function SolicitacaoForm({
                           disabled={modo === "editar" && !modoEdicao}
                         />
                         <span className="text-sm text-muted-foreground">
-                          {field.value ? "Sim" : "Nao"}
+                          {field.value ? "Sim" : "Não"}
                         </span>
                       </div>
                     </FormControl>
@@ -836,7 +836,7 @@ export default function SolicitacaoForm({
                     name="trajeto.0.origem"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Local de saida</FormLabel>
+                        <FormLabel>Local de saída</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Origem"
@@ -872,7 +872,7 @@ export default function SolicitacaoForm({
                     name="trajeto.0.hora"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Horario</FormLabel>
+                        <FormLabel>Horário</FormLabel>
                         <FormControl>
                           <Input
                             type="time"
@@ -894,7 +894,7 @@ export default function SolicitacaoForm({
                       name="trajeto.1.origem"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Local de saida</FormLabel>
+                          <FormLabel>Local de saída</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Origem"
@@ -930,7 +930,7 @@ export default function SolicitacaoForm({
                       name="trajeto.1.hora"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Horario</FormLabel>
+                          <FormLabel>Horário</FormLabel>
                           <FormControl>
                             <Input
                               type="time"
@@ -972,7 +972,7 @@ export default function SolicitacaoForm({
                 name="observacoes"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Observacoes</FormLabel>
+                    <FormLabel>Observações</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Opcional"
@@ -995,7 +995,7 @@ export default function SolicitacaoForm({
 
           <Card>
             <CardHeader>
-              <CardTitle>Acoes</CardTitle>
+              <CardTitle>Ações</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-2">
               {modo === "editar" && !modoEdicao ? (
@@ -1052,7 +1052,7 @@ export default function SolicitacaoForm({
                     disabled={emAcao || !podeEditarSolicitacao}
                     onClick={() => abrirConfirmacao("irOrcamento")}
                   >
-                    Ir para orcamento
+                    Ir para orçamento
                   </Button>
                 </>
               ) : null}
@@ -1063,7 +1063,7 @@ export default function SolicitacaoForm({
 
       {modo === "editar" ? (
         <p className="text-sm text-muted-foreground">
-          Cancelar e sair esta disponivel apenas antes do primeiro salvamento.
+          Cancelar e sair está disponível apenas antes do primeiro salvamento.
         </p>
       ) : null}
 
@@ -1078,11 +1078,11 @@ export default function SolicitacaoForm({
         descricao={
           confirmacao
             ? descricaoConfirmacao[confirmacao]
-            : "Confirme a operacao."
+            : "Confirme a operação."
         }
         textoConfirmar={
           confirmacao === "irOrcamento"
-            ? "Ir para orcamento"
+            ? "Ir para orçamento"
             : confirmacao === "encerrar"
               ? "Encerrar"
               : confirmacao === "cancelarESair"

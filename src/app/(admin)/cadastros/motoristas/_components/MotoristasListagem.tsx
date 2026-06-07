@@ -70,7 +70,7 @@ function textoStatusCnh(statusCnh: StatusCnh) {
   }
 
   if (statusCnh === "VENCENDO") {
-    return `CNH vence em ate ${DIAS_ALERTA_CNH} dias`;
+    return `CNH vence em até ${DIAS_ALERTA_CNH} dias`;
   }
 
   return "CNH valida";
@@ -170,7 +170,7 @@ export default function MotoristasListagem() {
       return;
     }
 
-    toast.success("Motorista excluido com sucesso.");
+    toast.success("Motorista excluído com sucesso.");
     await refetch();
   }
 
@@ -229,7 +229,7 @@ export default function MotoristasListagem() {
               className="text-sm font-medium"
               htmlFor="ordenacao-motoristas"
             >
-              Ordenacao
+              Ordenação
             </label>
             <Select
               value={ordenarPor}
@@ -275,7 +275,7 @@ export default function MotoristasListagem() {
               }}
             />
             <label className="text-sm" htmlFor="mostrar-cnh-valida">
-              Apenas com CNH valida
+              Apenas com CNH válida
             </label>
           </div>
         </CardContent>
@@ -309,7 +309,7 @@ export default function MotoristasListagem() {
                     <TableHead>CNH</TableHead>
                     <TableHead>Validade CNH</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead className="w-12 text-right">Acoes</TableHead>
+                    <TableHead className="w-12 text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -357,7 +357,7 @@ export default function MotoristasListagem() {
                               <Button
                                 variant="ghost"
                                 size="icon-sm"
-                                aria-label="Acoes"
+                                aria-label="Ações"
                               >
                                 <MoreHorizontalIcon className="size-4" />
                               </Button>
@@ -429,7 +429,7 @@ export default function MotoristasListagem() {
                     Anterior
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    Pagina {pagina} de {totalPaginas}
+                    Página {pagina} de {totalPaginas}
                   </span>
                   <Button
                     type="button"
@@ -440,7 +440,7 @@ export default function MotoristasListagem() {
                       setPagina((atual) => Math.min(totalPaginas, atual + 1))
                     }
                   >
-                    Proxima
+                    Próxima
                   </Button>
                 </div>
               </div>
@@ -465,10 +465,10 @@ export default function MotoristasListagem() {
         }
         descricao={
           acaoPendente === "desativar"
-            ? "O motorista deixara de aparecer nos seletores padrao das proximas escalas."
+            ? "O motorista deixará de aparecer nos seletores padrão das próximas escalas."
             : acaoPendente === "ativar"
-              ? "O motorista voltara a aparecer nos seletores padrao das escalas."
-              : "Esta acao remove o motorista definitivamente quando nao houver atendimentos vinculados."
+              ? "O motorista voltará a aparecer nos seletores padrão das escalas."
+              : "Esta ação remove o motorista definitivamente quando não houver atendimentos vinculados."
         }
         textoConfirmar={
           acaoPendente === "desativar"
@@ -492,7 +492,7 @@ export default function MotoristasListagem() {
           }
         }}
         titulo="Motorista em uso"
-        descricao="Este motorista possui atendimentos vinculados e nao pode ser excluido. Deseja desativar o cadastro em vez de excluir?"
+        descricao="Este motorista possui atendimentos vinculados e não pode ser excluído. Deseja desativar o cadastro em vez de excluir?"
         textoConfirmar="Desativar motorista"
         textoCancelar="Fechar"
         onConfirmar={desativarAposBloqueioExclusao}

@@ -167,9 +167,9 @@ export default function FuncionariosListagem() {
     }
 
     if (resposta.data.modo === "EXCLUIDO") {
-      toast.success("Funcionario excluido com sucesso.");
+      toast.success("Funcionário excluído com sucesso.");
     } else {
-      toast.success("Funcionario anonimizado com sucesso.");
+      toast.success("Funcionário anonimizado com sucesso.");
     }
 
     await refetch();
@@ -177,15 +177,15 @@ export default function FuncionariosListagem() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Funcionarios">
+      <PageHeader title="Funcionários">
         <div className="mt-2 flex items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
-            Gerencie lista branca, ativacao e ciclo de vida dos colaboradores.
+            Gerencie funcionários que atuam na operação.
           </p>
           <Button asChild>
             <Link href="/cadastros/funcionarios/novo">
               <PlusIcon className="size-4" />
-              Novo funcionario
+              Novo funcionário
             </Link>
           </Button>
         </div>
@@ -202,7 +202,7 @@ export default function FuncionariosListagem() {
             </label>
             <Input
               id="busca-funcionarios"
-              placeholder="Buscar por nome, e-mail, matricula ou CPF"
+              placeholder="Buscar por nome, e-mail, matrícula ou CPF"
               value={buscaDigitada}
               onChange={(event) => setBuscaDigitada(event.target.value)}
             />
@@ -241,7 +241,7 @@ export default function FuncionariosListagem() {
               className="text-sm font-medium"
               htmlFor="classificacao-funcionarios"
             >
-              Classificacao
+              Cargo
             </label>
             <Select
               value={classificacao ?? "TODOS"}
@@ -258,7 +258,7 @@ export default function FuncionariosListagem() {
                 <SelectValue placeholder="Todas" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="TODOS">Todas</SelectItem>
+                <SelectItem value="TODOS">Todos</SelectItem>
                 <SelectItem value="GERENTE">Gerente</SelectItem>
                 <SelectItem value="ATENDENTE">Atendente</SelectItem>
               </SelectContent>
@@ -270,7 +270,7 @@ export default function FuncionariosListagem() {
               className="text-sm font-medium"
               htmlFor="ordenacao-funcionarios"
             >
-              Ordenacao
+              Ordenação
             </label>
             <Select
               value={ordenarPor}
@@ -301,16 +301,16 @@ export default function FuncionariosListagem() {
         <CardContent className="space-y-4">
           {isLoading ? (
             <p className="text-sm text-muted-foreground">
-              Carregando funcionarios...
+              Carregando funcionários...
             </p>
           ) : funcionarios.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed p-8 text-center">
               <p className="text-sm text-muted-foreground">
-                Nenhum funcionario encontrado.
+                Nenhum funcionário encontrado.
               </p>
               <Button asChild>
                 <Link href="/cadastros/funcionarios/novo">
-                  Cadastrar primeiro funcionario
+                  Cadastrar primeiro funcionário
                 </Link>
               </Button>
             </div>
@@ -320,12 +320,12 @@ export default function FuncionariosListagem() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Nome</TableHead>
-                    <TableHead>Matricula</TableHead>
-                    <TableHead>Classificacao</TableHead>
+                    <TableHead>Matrícula</TableHead>
+                    <TableHead>Cargo</TableHead>
                     <TableHead>Perfil</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Contato</TableHead>
-                    <TableHead className="w-12 text-right">Acoes</TableHead>
+                    <TableHead className="w-12 text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -370,7 +370,7 @@ export default function FuncionariosListagem() {
                             <Button
                               variant="ghost"
                               size="icon-sm"
-                              aria-label="Acoes"
+                              aria-label="Ações"
                             >
                               <MoreHorizontalIcon className="size-4" />
                             </Button>
@@ -421,7 +421,7 @@ export default function FuncionariosListagem() {
 
               <div className="flex items-center justify-between gap-2 border-t pt-4">
                 <p className="text-sm text-muted-foreground">
-                  {data?.total ?? 0} funcionario(s) encontrado(s)
+                  {data?.total ?? 0} funcionário(s) encontrado(s)
                 </p>
                 <div className="flex items-center gap-2">
                   <Button
@@ -434,7 +434,7 @@ export default function FuncionariosListagem() {
                     Anterior
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    Pagina {pagina} de {totalPaginas}
+                    Página {pagina} de {totalPaginas}
                   </span>
                   <Button
                     type="button"
@@ -445,7 +445,7 @@ export default function FuncionariosListagem() {
                       setPagina((atual) => Math.min(totalPaginas, atual + 1))
                     }
                   >
-                    Proxima
+                    Próxima
                   </Button>
                 </div>
               </div>
@@ -461,17 +461,17 @@ export default function FuncionariosListagem() {
         }}
         titulo={
           acaoPendente === "ativar"
-            ? "Ativar funcionario"
+            ? "Ativar funcionário"
             : acaoPendente === "inativar"
-              ? "Inativar funcionario"
-              : "Excluir ou anonimizar funcionario"
+              ? "Inativar funcionário"
+              : "Excluir ou anonimizar funcionário"
         }
         descricao={
           acaoPendente === "ativar"
-            ? "Deseja ativar este funcionario e liberar acesso ao sistema?"
+            ? "Deseja ativar este funcionário e liberar acesso ao sistema?"
             : acaoPendente === "inativar"
-              ? "Deseja inativar este funcionario e bloquear novos logins?"
-              : "Se for convidado sem uso, sera excluido. Caso contrario, os dados serao anonimizados."
+              ? "Deseja inativar este funcionário e bloquear novos logins?"
+              : "Se for convidado ou sem uso, será excluído. Caso contrário, os dados serão anonimizados."
         }
         textoConfirmar={
           acaoPendente === "ativar"

@@ -76,7 +76,7 @@ export default function ContratoEtapaClient({
       const mensagem =
         error instanceof Error
           ? error.message
-          : "Nao foi possivel gerar o contrato.";
+          : "Não foi possível gerar o contrato.";
       toast.error(mensagem);
     } finally {
       setGerando(false);
@@ -93,7 +93,7 @@ export default function ContratoEtapaClient({
       return;
     }
 
-    toast.success("Servico iniciado.");
+    toast.success("Serviço iniciado.");
     router.refresh();
   }
 
@@ -107,7 +107,7 @@ export default function ContratoEtapaClient({
       return;
     }
 
-    toast.success("Servico finalizado.");
+    toast.success("Serviço finalizado.");
     router.refresh();
   }
 
@@ -132,18 +132,18 @@ export default function ContratoEtapaClient({
       <ConfirmDialog
         aberto={dialogIniciar}
         onAbertoChange={setDialogIniciar}
-        titulo="Iniciar servico"
-        descricao="Confirma o inicio do servico? O status sera atualizado para 'Servico em andamento'."
-        textoConfirmar="Iniciar servico"
+        titulo="Iniciar serviço"
+        descricao="Confirma o início do serviço? O status será atualizado para 'Serviço em andamento'."
+        textoConfirmar="Iniciar serviço"
         onConfirmar={onIniciarServico}
       />
 
       <ConfirmDialog
         aberto={dialogFinalizar}
         onAbertoChange={setDialogFinalizar}
-        titulo="Finalizar servico"
-        descricao="Confirma a finalizacao do servico? Esta acao encerra o atendimento e nao pode ser desfeita."
-        textoConfirmar="Finalizar servico"
+        titulo="Finalizar serviço"
+        descricao="Confirma a finalização do serviço? Esta ação encerra o atendimento e não pode ser desfeita."
+        textoConfirmar="Finalizar serviço"
         onConfirmar={onFinalizarServico}
       />
 
@@ -151,7 +151,7 @@ export default function ContratoEtapaClient({
         aberto={dialogEncerrar}
         onAbertoChange={setDialogEncerrar}
         titulo="Encerrar atendimento"
-        descricao="Deseja encerrar o atendimento nesta etapa? Esta acao nao remove registros historicos."
+        descricao="Deseja encerrar o atendimento nesta etapa? Esta ação não remove registros históricos."
         textoConfirmar="Encerrar atendimento"
         varianteConfirmar="destructive"
         onConfirmar={onEncerrarAtendimento}
@@ -159,7 +159,7 @@ export default function ContratoEtapaClient({
 
       <Card>
         <CardHeader>
-          <CardTitle>Acoes do contrato</CardTitle>
+          <CardTitle>Ações do contrato</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
           <Button
@@ -206,14 +206,14 @@ export default function ContratoEtapaClient({
               onClick={() => setDialogIniciar(true)}
             >
               <PlayCircle className="size-4" />
-              Iniciar servico
+              Iniciar serviço
             </Button>
           ) : null}
 
           {status === "SERVICO_EM_ANDAMENTO" ? (
             <Button type="button" onClick={() => setDialogFinalizar(true)}>
               <CheckCircle className="size-4" />
-              Finalizar servico
+              Finalizar serviço
             </Button>
           ) : null}
 
@@ -247,7 +247,7 @@ export default function ContratoEtapaClient({
                   <TableHead>Arquivo</TableHead>
                   <TableHead>Gerado em</TableHead>
                   <TableHead>Gerado por</TableHead>
-                  <TableHead className="w-44 text-right">Acoes</TableHead>
+                  <TableHead className="w-44 text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -259,7 +259,7 @@ export default function ContratoEtapaClient({
                     <TableCell>{formatarDataHora(contrato.geradoEm)}</TableCell>
                     <TableCell>
                       {contrato.geradoPorUsuario?.nome ??
-                        "Usuario nao identificado"}
+                        "Usuário não identificado"}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
