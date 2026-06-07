@@ -6,7 +6,7 @@ export default function NovoAtendimentoPage() {
     <div className="space-y-6">
       <PageHeader title="Novo atendimento">
         <p className="mt-2 text-sm text-muted-foreground">
-          Preencha os dados da solicitacao e salve para iniciar o atendimento.
+          Preencha os dados da solicitação e salve para iniciar o atendimento.
         </p>
       </PageHeader>
 

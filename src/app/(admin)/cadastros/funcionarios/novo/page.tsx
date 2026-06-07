@@ -63,7 +63,7 @@ export default function NovoFuncionarioPage() {
     }
 
     toast.success(
-      `Funcionario convidado com matricula ${resposta.data.matricula}.`,
+      `Funcionário convidado com matrícula ${resposta.data.matricula}.`,
     );
     form.reset();
   }
@@ -122,7 +122,7 @@ export default function NovoFuncionarioPage() {
                   <FormItem>
                     <FormLabel>CPF</FormLabel>
                     <FormControl>
-                      <Input placeholder="Somente digitos" {...field} />
+                      <Input placeholder="Somente dígitos" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -136,7 +136,7 @@ export default function NovoFuncionarioPage() {
                   <FormItem>
                     <FormLabel>Telefone principal</FormLabel>
                     <FormControl>
-                      <Input placeholder="Somente digitos" {...field} />
+                      <Input placeholder="Somente dígitos" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -148,7 +148,7 @@ export default function NovoFuncionarioPage() {
                 name="classificacao"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Classificacao</FormLabel>
+                    <FormLabel>Classificação</FormLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <FormControl>
                         <SelectTrigger>
@@ -234,9 +234,9 @@ export default function NovoFuncionarioPage() {
                 name="numero"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Numero</FormLabel>
+                    <FormLabel>Número</FormLabel>
                     <FormControl>
-                      <Input placeholder="Numero" {...field} />
+                      <Input placeholder="Número" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

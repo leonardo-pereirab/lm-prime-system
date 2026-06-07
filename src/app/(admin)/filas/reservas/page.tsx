@@ -59,8 +59,8 @@ export default async function FilaReservasPage() {
               status={item.status}
               descricaoPrincipal={
                 item.dataServico
-                  ? `Servico em ${formatarData(item.dataServico)}`
-                  : "Data do servico nao definida"
+                  ? `Serviço em ${formatarData(item.dataServico)}`
+                  : "Data do serviço não definida"
               }
             />
           ))}

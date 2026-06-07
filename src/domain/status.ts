@@ -15,8 +15,8 @@ export type EtapaVisualStatus =
   | "cancelada";
 
 const ETAPAS_ATENDIMENTO: Array<{ id: EtapaAtendimento; label: string }> = [
-  { id: "solicitacao", label: "Solicitacao" },
-  { id: "orcamento", label: "Orcamento" },
+  { id: "solicitacao", label: "Solicitação" },
+  { id: "orcamento", label: "Orçamento" },
   { id: "reserva", label: "Reserva" },
   { id: "escala", label: "Escala" },
   { id: "contrato", label: "Contrato" },
@@ -71,15 +71,15 @@ export const TRANSICOES_VALIDAS: Record<
 };
 
 export const STATUS_LABELS: Record<StatusAtendimento, string> = {
-  EM_SOLICITACAO: "Em solicitacao",
-  AGUARDANDO_ORCAMENTO: "Aguardando orcamento",
-  ORCAMENTO_REGISTRADO_AG_APROVACAO: "Orcamento registrado",
+  EM_SOLICITACAO: "Em solicitação",
+  AGUARDANDO_ORCAMENTO: "Aguardando orçamento",
+  ORCAMENTO_REGISTRADO_AG_APROVACAO: "Orçamento registrado",
   AGUARDANDO_RESERVA: "Aguardando reserva",
   RESERVA_REGISTRADA_AG_ESCALA: "Reserva registrada",
   ESCALA_DEFINIDA: "Escala definida",
-  SERVICO_EM_ANDAMENTO: "Servico em andamento",
-  SERVICO_FINALIZADO: "Servico finalizado",
-  ORCAMENTO_CANCELADO: "Orcamento cancelado",
+  SERVICO_EM_ANDAMENTO: "Serviço em andamento",
+  SERVICO_FINALIZADO: "Serviço finalizado",
+  ORCAMENTO_CANCELADO: "Orçamento cancelado",
   RESERVA_CANCELADA: "Reserva cancelada",
   ATENDIMENTO_CANCELADO: "Atendimento cancelado",
 };

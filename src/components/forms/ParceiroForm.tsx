@@ -222,7 +222,7 @@ export default function ParceiroForm({
                     <FormLabel>Telefone</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Somente numeros"
+                        placeholder="Somente números"
                         inputMode="numeric"
                         value={field.value}
                         onBlur={field.onBlur}
@@ -264,7 +264,7 @@ export default function ParceiroForm({
         </Card>
 
         <Card>
-          <CardHeader>{renderTituloSecao("endereco", "Endereco")}</CardHeader>
+          <CardHeader>{renderTituloSecao("endereco", "Endereço")}</CardHeader>
           {secoesAbertas.endereco && (
             <CardContent>
               <AddressForm
@@ -279,7 +279,7 @@ export default function ParceiroForm({
 
         <Card>
           <CardHeader>
-            {renderTituloSecao("observacoes", "Observacoes")}
+            {renderTituloSecao("observacoes", "Observações")}
           </CardHeader>
           {secoesAbertas.observacoes && (
             <CardContent>
@@ -290,7 +290,7 @@ export default function ParceiroForm({
                   <FormItem>
                     <FormControl>
                       <Textarea
-                        placeholder="Observacoes opcionais"
+                        placeholder="Observações opcionais"
                         className="min-h-24"
                         value={field.value ?? ""}
                         onChange={field.onChange}
@@ -319,7 +319,7 @@ export default function ParceiroForm({
               : (textoBotaoSalvar ??
                 (modo === "criar"
                   ? "Cadastrar parceiro"
-                  : "Salvar alteracoes"))}
+                  : "Salvar alterações"))}
           </Button>
         </div>
       </form>

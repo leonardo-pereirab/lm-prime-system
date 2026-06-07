@@ -2,7 +2,7 @@ import Link from "next/link";
 import AtivacaoContaForm from "@/components/forms/AtivacaoContaForm";
 
 export const metadata = {
-  title: "Ativacao de conta — LM Prime System",
+  title: "Ativação de conta — LM Prime System",
 };
 
 export default function AtivacaoContaPage() {
@@ -11,7 +11,7 @@ export default function AtivacaoContaPage() {
       <div className="w-full max-w-md rounded-lg border border-neutral-200 bg-white p-8 shadow-sm">
         <div className="mb-8 text-center">
           <h1 className="mb-1 text-2xl font-semibold text-primary-700">
-            Ativacao de conta
+            Ativação de conta
           </h1>
           <p className="text-sm text-neutral-500">
             Valide seus dados para concluir o primeiro acesso.

@@ -77,7 +77,7 @@ export function CepInput({
         if (!resposta.ok || payload.success === false) {
           ultimoCepConsultado.current = valorAtual;
           onEnderecoEncontrado?.(null);
-          onErroBusca?.(payload.error?.message ?? "CEP nao encontrado.");
+          onErroBusca?.(payload.error?.message ?? "CEP não encontrado.");
           return;
         }
 
@@ -92,7 +92,7 @@ export function CepInput({
         onErroBusca?.(
           error instanceof Error
             ? error.message
-            : "Nao foi possivel consultar o CEP.",
+            : "Não foi possível consultar o CEP.",
         );
       } finally {
         if (!cancelado) {

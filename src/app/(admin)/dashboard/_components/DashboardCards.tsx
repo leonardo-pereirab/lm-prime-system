@@ -14,7 +14,7 @@ export default function DashboardCards({ indicadores }: DashboardCardsProps) {
     <div className="grid gap-4 lg:grid-cols-2">
       <Card>
         <CardHeader>
-          <CardTitle>Atendimentos no periodo</CardTitle>
+          <CardTitle>Atendimentos no período</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-3xl font-semibold">
@@ -45,12 +45,12 @@ export default function DashboardCards({ indicadores }: DashboardCardsProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Taxa de conversao</CardTitle>
+          <CardTitle>Taxa de conversão</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-2">
           <div className="rounded-md border border-primary/25 bg-primary/5 p-3">
             <p className="text-xs text-muted-foreground">
-              Atendimentos feitos → Servicos finalizados
+              Atendimentos feitos → Serviços finalizados
             </p>
             <p className="text-lg font-semibold">
               {porcentagem(indicadores.conversoes.atendimentoParaServico)}
@@ -58,7 +58,7 @@ export default function DashboardCards({ indicadores }: DashboardCardsProps) {
           </div>
           <div className="rounded-md bg-muted p-3">
             <p className="text-xs text-muted-foreground">
-              Solicitacoes → Orcamentos
+              Solicitações → Orçamentos
             </p>
             <p className="text-lg font-semibold">
               {porcentagem(indicadores.conversoes.solicitacaoParaOrcamento)}
@@ -66,14 +66,14 @@ export default function DashboardCards({ indicadores }: DashboardCardsProps) {
           </div>
           <div className="rounded-md bg-muted p-3">
             <p className="text-xs text-muted-foreground">
-              Orcamentos → Reservas
+              Orçamentos → Reservas
             </p>
             <p className="text-lg font-semibold">
               {porcentagem(indicadores.conversoes.orcamentoParaReserva)}
             </p>
           </div>
           <div className="rounded-md bg-muted p-3">
-            <p className="text-xs text-muted-foreground">Reservas → Servicos</p>
+            <p className="text-xs text-muted-foreground">Reservas → Serviços</p>
             <p className="text-lg font-semibold">
               {porcentagem(indicadores.conversoes.reservaParaServico)}
             </p>

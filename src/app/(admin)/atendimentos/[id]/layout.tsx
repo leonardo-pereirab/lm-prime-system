@@ -42,19 +42,19 @@ function ResumoSolicitacao({
   return (
     <details className="rounded-lg border p-3">
       <summary className="cursor-pointer text-sm font-medium">
-        Resumo da solicitacao
+        Resumo da solicitação
       </summary>
       <div className="mt-3 grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
         <p>Contato: {nomeContato}</p>
         <p>Status: {STATUS_LABELS[atendimento.status]}</p>
-        <p>Tipo de servico: {atendimento.tipoServico}</p>
+        <p>Tipo de serviço: {atendimento.tipoServico}</p>
         <p>Passageiros: {atendimento.qtdPassageiros}</p>
         <p>Data do contato: {formatarData(atendimento.dataContato)}</p>
         <p>
-          Data do servico:{" "}
+          Data do serviço:{" "}
           {atendimento.dataServico
             ? formatarData(atendimento.dataServico)
-            : "Nao definida"}
+            : "Não definida"}
         </p>
       </div>
     </details>
@@ -113,7 +113,7 @@ export default async function AtendimentoLayout({
           {atendimento.orcamento ? (
             <details className="rounded-lg border p-3">
               <summary className="cursor-pointer text-sm font-medium">
-                Resumo do orcamento
+                Resumo do orçamento
               </summary>
               <div className="mt-3 grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
                 <p>
@@ -124,7 +124,7 @@ export default async function AtendimentoLayout({
                   Forma de pagamento: {atendimento.orcamento.formaPagamento}
                 </p>
                 <p>
-                  Valido ate:{" "}
+                  Válido até:{" "}
                   {formatarDataHora(atendimento.orcamento.validoAte)}
                 </p>
               </div>
@@ -156,7 +156,7 @@ export default async function AtendimentoLayout({
               </summary>
               <div className="mt-3 grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
                 <p>Motoristas: {atendimento.escala.motoristas.length}</p>
-                <p>Veiculos: {atendimento.escala.veiculos.length}</p>
+                <p>Veículos: {atendimento.escala.veiculos.length}</p>
                 <p>Parceiros: {atendimento.escala.parceiros.length}</p>
               </div>
             </details>

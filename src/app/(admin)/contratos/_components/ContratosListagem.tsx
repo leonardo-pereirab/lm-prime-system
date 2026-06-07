@@ -74,10 +74,10 @@ function DateRangePicker({
 }) {
   const descricao =
     valor?.from && valor?.to
-      ? `${formatarData(valor.from)} ate ${formatarData(valor.to)}`
+      ? `${formatarData(valor.from)} até ${formatarData(valor.to)}`
       : valor?.from
-        ? `${formatarData(valor.from)} ate ...`
-        : "Selecionar periodo";
+        ? `${formatarData(valor.from)} até ...`
+        : "Selecionar período";
 
   return (
     <Popover>
@@ -108,7 +108,7 @@ function DateRangePicker({
             size="sm"
             onClick={() => onChange(undefined)}
           >
-            Limpar periodo
+            Limpar período
           </Button>
         </div>
       </PopoverContent>
@@ -264,7 +264,7 @@ export default function ContratosListagem() {
           </div>
 
           <div className="space-y-2 lg:col-span-2">
-            <label className="text-sm font-medium">Periodo de geracao</label>
+            <label className="text-sm font-medium">Período de geração</label>
             <DateRangePicker
               valor={periodo}
               onChange={(valor) => {
@@ -318,10 +318,10 @@ export default function ContratosListagem() {
                   <TableRow>
                     <TableHead>Cliente</TableHead>
                     <TableHead>Atendimento</TableHead>
-                    <TableHead>Data do servico</TableHead>
+                    <TableHead>Data do serviço</TableHead>
                     <TableHead>Gerado em</TableHead>
                     <TableHead>Gerado por</TableHead>
-                    <TableHead className="w-28 text-right">Acoes</TableHead>
+                    <TableHead className="w-28 text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -344,7 +344,7 @@ export default function ContratosListagem() {
                       <TableCell>
                         {contrato.atendimento.dataServico
                           ? formatarData(contrato.atendimento.dataServico)
-                          : "Nao definida"}
+                          : "Não definida"}
                       </TableCell>
                       <TableCell>
                         {formatarDataHora(contrato.geradoEm)}
@@ -415,7 +415,7 @@ export default function ContratosListagem() {
                     Anterior
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    Pagina {pagina} de {totalPaginas}
+                    Página {pagina} de {totalPaginas}
                   </span>
                   <Button
                     type="button"
@@ -441,7 +441,7 @@ export default function ContratosListagem() {
           if (!aberto) setDialogArquivar(null);
         }}
         titulo="Arquivar contrato"
-        descricao="O contrato sera marcado como inativo e nao aparecera nos filtros padrao. Voce pode exibi-lo ativando a opcao 'Incluir arquivados'."
+        descricao="O contrato será marcado como inativo e não aparecerá nos filtros padrão. Você pode exibi-lo ativando a opção 'Incluir arquivados'."
         textoConfirmar="Arquivar"
         varianteConfirmar="destructive"
         carregando={arquivando}

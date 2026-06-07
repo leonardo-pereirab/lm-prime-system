@@ -27,22 +27,22 @@ export default function HistoricoServicos({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Historico de servicos executados</CardTitle>
+        <CardTitle>Histórico de serviços executados</CardTitle>
       </CardHeader>
       <CardContent>
         {itens.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Nenhum servico finalizado no periodo.
+            Nenhum serviço finalizado no período.
           </p>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Codigo</TableHead>
+                <TableHead>Código</TableHead>
                 <TableHead>Cliente/Lead</TableHead>
-                <TableHead>Data do servico</TableHead>
+                <TableHead>Data do serviço</TableHead>
                 <TableHead>Finalizado em</TableHead>
-                <TableHead className="text-right">Acoes</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -55,7 +55,7 @@ export default function HistoricoServicos({
                   <TableCell>
                     {item.dataServico
                       ? formatarDataHora(item.dataServico)
-                      : "Nao definida"}
+                      : "Não definida"}
                   </TableCell>
                   <TableCell>{formatarDataHora(item.updatedAt)}</TableCell>
                   <TableCell className="text-right">

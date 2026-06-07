@@ -315,9 +315,9 @@ export default function ReservaForm({
     salvar: "Deseja confirmar a reserva com os dados informados?",
     limpar: "Deseja limpar os campos desta etapa?",
     cancelarReserva:
-      "Deseja cancelar esta reserva? O atendimento sera marcado como RESERVA_CANCELADA.",
+      "Deseja cancelar esta reserva? O atendimento será marcado como RESERVA_CANCELADA.",
     encerrar:
-      "Deseja encerrar o atendimento nesta etapa? Esta acao nao remove o historico.",
+      "Deseja encerrar o atendimento nesta etapa? Esta ação não remove o histórico.",
     irEscala: "Deseja seguir para a etapa de escala?",
   };
 
@@ -336,7 +336,7 @@ export default function ReservaForm({
                 <p>Telefone: {formatarTelefoneBr(cliente.telefone)}</p>
                 {cliente.telefoneSec ? (
                   <p>
-                    Telefone secundario:{" "}
+                    Telefone secundário:{" "}
                     {formatarTelefoneBr(cliente.telefoneSec)}
                   </p>
                 ) : null}
@@ -381,7 +381,7 @@ export default function ReservaForm({
                 name="observacoes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Observacoes da reserva</FormLabel>
+                    <FormLabel>Observações da reserva</FormLabel>
                     <FormControl>
                       <Textarea
                         value={String(field.value ?? "")}
@@ -442,7 +442,7 @@ export default function ReservaForm({
             </Button>
             <Button type="button" variant="outline" asChild>
               <Link href={`/atendimentos/${atendimentoId}/orcamento`}>
-                Voltar para orcamento
+                Voltar para orçamento
               </Link>
             </Button>
             <Button

@@ -22,7 +22,7 @@ export default function GlobalError({ error, reset }: ErrorPageProps) {
           Ocorreu um erro inesperado
         </h1>
         <p className="mt-2 text-sm text-neutral-600">
-          Nao foi possivel carregar esta pagina agora. Tente novamente.
+          Não foi possível carregar esta página agora. Tente novamente.
         </p>
 
         <div className="mt-6 flex items-center justify-center gap-3">
@@ -30,7 +30,7 @@ export default function GlobalError({ error, reset }: ErrorPageProps) {
             Tentar novamente
           </Button>
           <Button type="button" variant="outline" asChild>
-            <Link href="/dashboard">Voltar ao inicio</Link>
+            <Link href="/dashboard">Voltar ao início</Link>
           </Button>
         </div>
       </div>

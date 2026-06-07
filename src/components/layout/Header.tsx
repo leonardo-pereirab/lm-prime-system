@@ -26,19 +26,19 @@ type HeaderProps = {
 };
 
 const labelsRotas: Record<string, string> = {
-  dashboard: "Inicio",
+  dashboard: "Início",
   atendimentos: "Atendimentos",
   clientes: "Clientes",
   contratos: "Contratos",
   cadastros: "Cadastros",
   motoristas: "Motoristas",
   novo: "Novo",
-  veiculos: "Veiculos",
+  veiculos: "Veículos",
   parceiros: "Parceiros",
   reservas: "Reservas",
-  orcamentos: "Orcamentos",
+  orcamentos: "Orçamentos",
   escala: "Escala",
-  usuarios: "Usuarios",
+  usuarios: "Usuários",
 };
 
 function formatarSegmento(segmento: string) {
@@ -57,7 +57,7 @@ function construirBreadcrumb(pathname: string) {
   const segmentos = pathname.split("/").filter(Boolean);
 
   if (segmentos.length === 0) {
-    return [{ label: "Inicio", href: "/dashboard" }];
+    return [{ label: "Início", href: "/dashboard" }];
   }
 
   return segmentos.map((segmento, index) => ({
@@ -95,7 +95,7 @@ export default function Header({ onAbrirSidebarMobile, usuario }: HeaderProps) {
           size="icon"
           className="lg:hidden"
           onClick={onAbrirSidebarMobile}
-          aria-label="Abrir menu de navegacao"
+          aria-label="Abrir menu de navegação"
         >
           <Menu className="size-4" />
         </Button>
@@ -135,9 +135,9 @@ export default function Header({ onAbrirSidebarMobile, usuario }: HeaderProps) {
           type="button"
           variant="ghost"
           size="icon"
-          aria-label="Notificacoes"
+          aria-label="Notificações"
         >
-          <Bell className="size-4" />
+          <Bell className="size-5" />
         </Button>
 
         <DropdownMenu>
@@ -158,10 +158,10 @@ export default function Header({ onAbrirSidebarMobile, usuario }: HeaderProps) {
               </p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem disabled>Configuracoes</DropdownMenuItem>
+            <DropdownMenuItem disabled>Configurações</DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/politica-de-privacidade">
-                Politica de privacidade
+                Política de privacidade
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

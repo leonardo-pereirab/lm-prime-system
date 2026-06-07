@@ -248,7 +248,7 @@ export default function MotoristaForm({
                     <FormLabel>Telefone</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Somente numeros"
+                        placeholder="Somente números"
                         inputMode="numeric"
                         value={field.value}
                         onBlur={field.onBlur}
@@ -276,7 +276,7 @@ export default function MotoristaForm({
                 name="cnh"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Numero da CNH</FormLabel>
+                    <FormLabel>Número da CNH</FormLabel>
                     <FormControl>
                       <Input placeholder="Informe a CNH" {...field} />
                     </FormControl>
@@ -332,7 +332,7 @@ export default function MotoristaForm({
 
         <Card>
           <CardHeader>
-            {renderTituloSecao("observacoes", "Observacoes")}
+            {renderTituloSecao("observacoes", "Observações")}
           </CardHeader>
           {secoesAbertas.observacoes && (
             <CardContent>
@@ -343,7 +343,7 @@ export default function MotoristaForm({
                   <FormItem>
                     <FormControl>
                       <Textarea
-                        placeholder="Observacoes opcionais"
+                        placeholder="Observações opcionais"
                         className="min-h-24"
                         value={field.value ?? ""}
                         onChange={field.onChange}
@@ -369,7 +369,7 @@ export default function MotoristaForm({
               : (textoBotaoSalvar ??
                 (modo === "criar"
                   ? "Cadastrar motorista"
-                  : "Salvar alteracoes"))}
+                  : "Salvar alterações"))}
           </Button>
         </div>
       </form>

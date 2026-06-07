@@ -103,8 +103,8 @@ type AcaoSensivel = "salvar" | "limpar" | "encerrar";
 const TIPOS_VEICULO: Array<{ value: TipoVeiculo; label: string }> = [
   { value: "CARRO_PASSEIO", label: "Carro passeio" },
   { value: "VAN", label: "Van" },
-  { value: "MICRO_ONIBUS", label: "Micro-onibus" },
-  { value: "ONIBUS", label: "Onibus" },
+  { value: "MICRO_ONIBUS", label: "Micro-ônibus" },
+  { value: "ONIBUS", label: "Ônibus" },
   { value: "OUTRO", label: "Outro" },
 ];
 
@@ -288,10 +288,10 @@ export default function EscalaForm({
   };
 
   const descricaoConfirmacao: Record<AcaoSensivel, string> = {
-    salvar: "Deseja salvar as alteracoes da escala?",
+    salvar: "Deseja salvar as alterações da escala?",
     limpar: "Deseja limpar os campos desta etapa?",
     encerrar:
-      "Deseja encerrar o atendimento nesta etapa? O status sera RESERVA_CANCELADA.",
+      "Deseja encerrar o atendimento nesta etapa? O status será RESERVA_CANCELADA.",
   };
 
   async function onSalvar(dados: EscalaFormOutput) {
@@ -448,7 +448,7 @@ export default function EscalaForm({
 
           <Card>
             <CardHeader>
-              <CardTitle>Veiculos proprios</CardTitle>
+              <CardTitle>Veículos próprios</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <FormField
@@ -458,8 +458,8 @@ export default function EscalaForm({
                   <FormItem>
                     <FormControl>
                       <SeletorMultiplo
-                        placeholder="Selecionar veiculos"
-                        buscaPlaceholder="Buscar veiculo"
+                        placeholder="Selecionar veículos"
+                        buscaPlaceholder="Buscar veículo"
                         selecionados={field.value ?? []}
                         onToggle={(id) => {
                           if (bloqueado) return;
@@ -526,7 +526,7 @@ export default function EscalaForm({
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between gap-3">
-              <CardTitle>Parceiros (terceirizacao)</CardTitle>
+              <CardTitle>Parceiros (terceirização)</CardTitle>
               <Button
                 type="button"
                 variant="outline"
@@ -606,7 +606,7 @@ export default function EscalaForm({
                       name={`parceiros.${indice}.qtdVeiculos`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Quantidade de veiculos</FormLabel>
+                          <FormLabel>Quantidade de veículos</FormLabel>
                           <FormControl>
                             <Input
                               type="number"
@@ -628,7 +628,7 @@ export default function EscalaForm({
                       name={`parceiros.${indice}.tipoVeiculo`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Tipo de veiculo</FormLabel>
+                          <FormLabel>Tipo de veículo</FormLabel>
                           <FormControl>
                             <Select
                               value={field.value}
@@ -680,7 +680,7 @@ export default function EscalaForm({
                       name={`parceiros.${indice}.observacoes`}
                       render={({ field }) => (
                         <FormItem className="md:col-span-2">
-                          <FormLabel>Observacoes</FormLabel>
+                          <FormLabel>Observações</FormLabel>
                           <FormControl>
                             <Input
                               value={String(field.value ?? "")}
@@ -702,7 +702,7 @@ export default function EscalaForm({
 
           <Card>
             <CardHeader>
-              <CardTitle>Observacoes da escala</CardTitle>
+              <CardTitle>Observações da escala</CardTitle>
             </CardHeader>
             <CardContent>
               <FormField
@@ -772,7 +772,7 @@ export default function EscalaForm({
 
             <Button type="button" asChild>
               <Link href={`/atendimentos/${atendimentoId}/contrato`}>
-                Ir para emissao de contrato
+                Ir para emissão de contrato
               </Link>
             </Button>
           </div>
@@ -780,7 +780,7 @@ export default function EscalaForm({
           {escalaSalva ? (
             <p className="text-sm text-muted-foreground">
               Escala salva com sucesso. Repasses cadastrados podem ser revisados
-              na propria etapa.
+              na própria etapa.
             </p>
           ) : null}
         </form>

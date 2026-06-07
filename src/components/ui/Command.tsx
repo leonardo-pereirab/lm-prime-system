@@ -32,7 +32,7 @@ function Command({
 
 function CommandDialog({
   title = "Paleta de comandos",
-  description = "Busque uma acao para executar.",
+  description = "Busque uma ação para executar.",
   children,
   className,
   showCloseButton = false,

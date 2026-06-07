@@ -18,7 +18,7 @@ function TopLista({ titulo, itens }: TopListaProps) {
       </CardHeader>
       <CardContent>
         {itens.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Sem dados no periodo.</p>
+          <p className="text-sm text-muted-foreground">Sem dados no período.</p>
         ) : (
           <ul className="space-y-2 text-sm">
             {itens.map((item, indice) => (
@@ -47,7 +47,7 @@ export default function TopRecursos({ indicadores }: TopRecursosProps) {
         itens={indicadores.topRecursos.motoristas}
       />
       <TopLista
-        titulo="Veiculos mais usados"
+        titulo="Veículos mais usados"
         itens={indicadores.topRecursos.veiculos}
       />
       <TopLista

@@ -6,14 +6,14 @@ type BreakdownCancelamentosProps = {
 };
 
 const ETAPA_LABELS: Record<string, string> = {
-  EM_SOLICITACAO: "Solicitacao",
-  AGUARDANDO_ORCAMENTO: "Orcamento",
-  ORCAMENTO_REGISTRADO_AG_APROVACAO: "Orcamento",
+  EM_SOLICITACAO: "Solicitação",
+  AGUARDANDO_ORCAMENTO: "Orçamento",
+  ORCAMENTO_REGISTRADO_AG_APROVACAO: "Orçamento",
   AGUARDANDO_RESERVA: "Reserva",
   RESERVA_REGISTRADA_AG_ESCALA: "Escala",
   ESCALA_DEFINIDA: "Escala",
-  SERVICO_EM_ANDAMENTO: "Servico",
-  SERVICO_FINALIZADO: "Servico",
+  SERVICO_EM_ANDAMENTO: "Serviço",
+  SERVICO_FINALIZADO: "Serviço",
 };
 
 function normalizarPorEtapa(indicadores: DashboardIndicadores) {
@@ -28,23 +28,23 @@ function normalizarPorEtapa(indicadores: DashboardIndicadores) {
   for (const item of indicadores.cancelamentosPorEtapa) {
     const etapa = item.etapa ? ETAPA_LABELS[item.etapa] : null;
 
-    if (etapa === "Solicitacao") acumulado.solicitacao += item.total;
-    if (etapa === "Orcamento") acumulado.orcamento += item.total;
+    if (etapa === "Solicitação") acumulado.solicitacao += item.total;
+    if (etapa === "Orçamento") acumulado.orcamento += item.total;
     if (etapa === "Reserva") acumulado.reserva += item.total;
     if (etapa === "Escala") acumulado.escala += item.total;
-    if (etapa === "Servico") acumulado.servico += item.total;
+    if (etapa === "Serviço") acumulado.servico += item.total;
   }
 
   return [
     {
       chave: "solicitacao",
-      label: "Solicitacao",
+      label: "Solicitação",
       total: acumulado.solicitacao,
     },
-    { chave: "orcamento", label: "Orcamento", total: acumulado.orcamento },
+    { chave: "orcamento", label: "Orçamento", total: acumulado.orcamento },
     { chave: "reserva", label: "Reserva", total: acumulado.reserva },
     { chave: "escala", label: "Escala", total: acumulado.escala },
-    { chave: "servico", label: "Servico", total: acumulado.servico },
+    { chave: "servico", label: "Serviço", total: acumulado.servico },
   ];
 }
 

@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     throw new ConflictError(
       "CRIACAO_DIRETA_BLOQUEADA",
-      "Criacao direta de usuario bloqueada. Use o fluxo de ativacao de funcionario.",
+      "Criação direta de usuário bloqueada. Use o fluxo de ativação de funcionário.",
     );
   });
 }

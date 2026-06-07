@@ -15,7 +15,7 @@ export default async function AtendimentoSolicitacaoPage({
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Solicitacao">
+      <PageHeader title="Solicitação">
         <div className="mt-2 space-y-1 text-sm text-muted-foreground">
           <p>Atendimento: {atendimento.codigo ?? atendimento.id}</p>
           <p>Status: {atendimento.status}</p>

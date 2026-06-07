@@ -57,14 +57,14 @@ export default function FiltroPeriodoDashboard({
 
   const descricaoPeriodo = useMemo(() => {
     if (periodoCustom?.from && periodoCustom?.to) {
-      return `${formatarData(periodoCustom.from)} ate ${formatarData(periodoCustom.to)}`;
+      return `${formatarData(periodoCustom.from)} até ${formatarData(periodoCustom.to)}`;
     }
 
     if (periodoCustom?.from) {
-      return `${formatarData(periodoCustom.from)} ate ...`;
+      return `${formatarData(periodoCustom.from)} até ...`;
     }
 
-    return "Selecionar periodo";
+    return "Selecionar período";
   }, [periodoCustom?.from, periodoCustom?.to]);
 
   function aplicarFiltro(
@@ -93,7 +93,7 @@ export default function FiltroPeriodoDashboard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Filtro de periodo</CardTitle>
+        <CardTitle>Filtro de período</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-4 lg:grid-cols-2">
         <div className="space-y-2">
@@ -101,7 +101,7 @@ export default function FiltroPeriodoDashboard({
             className="text-sm font-medium"
             htmlFor="dashboard-periodo-preset"
           >
-            Preset
+            Definição de período
           </label>
           <Select
             value={preset}
@@ -112,20 +112,20 @@ export default function FiltroPeriodoDashboard({
             }}
           >
             <SelectTrigger id="dashboard-periodo-preset" className="w-full">
-              <SelectValue placeholder="Selecione o periodo" />
+              <SelectValue placeholder="Selecione o período" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="7d">Ultimos 7 dias</SelectItem>
               <SelectItem value="30d">Ultimos 30 dias</SelectItem>
               <SelectItem value="90d">Ultimos 90 dias</SelectItem>
               <SelectItem value="mes-atual">Ano atual</SelectItem>
-              <SelectItem value="custom">Custom</SelectItem>
+              <SelectItem value="custom">Personalizado</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Periodo custom</label>
+          <label className="text-sm font-medium">Período personalizado</label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -156,7 +156,7 @@ export default function FiltroPeriodoDashboard({
             </PopoverContent>
           </Popover>
           <p className="text-xs text-muted-foreground">
-            Use apenas quando o preset estiver em Custom.
+            Use apenas quando o preset estiver em Personalizado.
           </p>
         </div>
       </CardContent>

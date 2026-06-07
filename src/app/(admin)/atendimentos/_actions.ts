@@ -192,7 +192,7 @@ export async function salvarEscala(id: string, payload: unknown) {
     if (!escala?.id) {
       throw new ValidationError(
         "ESCALA_NAO_PERSISTIDA",
-        "Nao foi possivel persistir a escala.",
+        "Não foi possível persistir a escala.",
       );
     }
 

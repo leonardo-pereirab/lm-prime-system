@@ -36,7 +36,7 @@ function textoStatusCnh(statusCnh: StatusCnh) {
   }
 
   if (statusCnh === "VENCENDO") {
-    return `CNH vence em ate ${DIAS_ALERTA_CNH} dias`;
+    return `CNH vence em até ${DIAS_ALERTA_CNH} dias`;
   }
 
   return "CNH valida";
@@ -114,7 +114,7 @@ export default function MotoristaDetalhe({
         <MotoristaForm
           modo="editar"
           valoresIniciais={mapearValoresIniciais(motorista)}
-          textoBotaoSalvar="Salvar alteracoes"
+          textoBotaoSalvar="Salvar alterações"
           onCancelar={() => setModoEdicao(false)}
           onSubmit={(payload) => atualizarMotorista(id, payload)}
           onSucesso={async () => {
@@ -157,7 +157,7 @@ export default function MotoristaDetalhe({
               <p className="text-sm">{formatarDataHora(motorista.createdAt)}</p>
             </div>
             <div className="md:col-span-2">
-              <p className="text-xs text-muted-foreground">Observacoes</p>
+              <p className="text-xs text-muted-foreground">Observações</p>
               <p className="text-sm">{textoOuTraco(motorista.observacoes)}</p>
             </div>
           </CardContent>

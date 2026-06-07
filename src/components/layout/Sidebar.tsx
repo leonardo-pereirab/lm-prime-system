@@ -27,16 +27,16 @@ type ItemNavegacao = {
 };
 
 const itensPrincipais: ItemNavegacao[] = [
-  { href: "/dashboard", label: "Inicio", icon: Home },
+  { href: "/dashboard", label: "Início", icon: Home },
   { href: "/atendimentos", label: "Atendimentos", icon: LayoutGrid },
   { href: "/clientes", label: "Clientes", icon: Users },
   { href: "/contratos", label: "Contratos", icon: FileText },
 ];
 
 const itensCadastros = [
-  { href: "/cadastros/funcionarios", label: "Funcionarios" },
+  { href: "/cadastros/funcionarios", label: "Funcionários" },
   { href: "/cadastros/motoristas", label: "Motoristas" },
-  { href: "/cadastros/veiculos", label: "Veiculos" },
+  { href: "/cadastros/veiculos", label: "Veículos" },
   { href: "/cadastros/parceiros", label: "Parceiros" },
 ];
 
@@ -71,7 +71,7 @@ function ConteudoSidebar({
 
       <nav
         className="flex-1 overflow-y-auto px-3 py-4"
-        aria-label="Navegacao principal"
+        aria-label="Navegação principal"
       >
         <ul className="space-y-1">
           {itensPrincipais.map((item) => {
@@ -172,7 +172,7 @@ export default function Sidebar({
 
       <Sheet open={abertaMobile} onOpenChange={onAbertaMobileChange}>
         <SheetContent side="left" className="p-0 w-60" showCloseButton>
-          <SheetTitle className="sr-only">Menu de navegacao</SheetTitle>
+          <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
           <ConteudoSidebar
             pathname={pathname}
             onNavegar={() => onAbertaMobileChange(false)}

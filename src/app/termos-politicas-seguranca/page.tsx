@@ -30,10 +30,10 @@ export default function TermosPoliticasSegurancaPage() {
 
         <div className="space-y-2">
           <h2 className="text-lg font-semibold text-neutral-900">
-            2. Perfil e classificacao
+            2. Perfil e classificação
           </h2>
           <p className="text-sm leading-6 text-neutral-700">
-            O perfil tecnico e definido pela classificacao do funcionario e pode
+            O perfil técnico é definido pela classificação do funcionário e pode
             ser alterado somente por gerente autorizado.
           </p>
         </div>
@@ -53,7 +53,7 @@ export default function TermosPoliticasSegurancaPage() {
             4. Guarda e rastreabilidade
           </h2>
           <p className="text-sm leading-6 text-neutral-700">
-            Registros de fluxo sao mantidos para auditoria e historico
+            Registros de fluxo são mantidos para auditoria e histórico
             operacional. Quando necessario, aplicamos anonimização conforme
             regras internas.
           </p>
@@ -81,7 +81,7 @@ export default function TermosPoliticasSegurancaPage() {
           href="/dashboard"
           className="text-sm font-medium text-primary-700 hover:text-primary-800"
         >
-          Ir para inicio
+          Ir para início
         </Link>
       </div>
     </main>

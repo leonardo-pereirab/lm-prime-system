@@ -68,17 +68,17 @@ const OPCOES_FORMA_PAGAMENTO: Array<{ value: FormaPagamento; label: string }> =
   [
     { value: "DINHEIRO", label: "Dinheiro" },
     { value: "PIX", label: "Pix" },
-    { value: "CARTAO_CREDITO", label: "Cartao de credito" },
-    { value: "CARTAO_DEBITO", label: "Cartao de debito" },
-    { value: "TRANSFERENCIA", label: "Transferencia" },
+    { value: "CARTAO_CREDITO", label: "Cartão de crédito" },
+    { value: "CARTAO_DEBITO", label: "Cartão de débito" },
+    { value: "TRANSFERENCIA", label: "Transferência" },
     { value: "BOLETO", label: "Boleto" },
   ];
 
 const OPCOES_TIPO_VEICULO: Array<{ value: TipoVeiculo; label: string }> = [
   { value: "CARRO_PASSEIO", label: "Carro passeio" },
   { value: "VAN", label: "Van" },
-  { value: "MICRO_ONIBUS", label: "Micro-onibus" },
-  { value: "ONIBUS", label: "Onibus" },
+  { value: "MICRO_ONIBUS", label: "Micro-ônibus" },
+  { value: "ONIBUS", label: "Ônibus" },
   { value: "OUTRO", label: "Outro" },
 ];
 
@@ -251,7 +251,7 @@ export default function OrcamentoForm({
     );
     setOrcamentoSalvo(true);
     setModoEdicao(false);
-    toast.success("Orcamento salvo com sucesso.");
+    toast.success("Orçamento salvo com sucesso.");
     router.refresh();
   }
 
@@ -281,7 +281,7 @@ export default function OrcamentoForm({
         return;
       }
 
-      toast.success("Orcamento cancelado com sucesso.");
+      toast.success("Orçamento cancelado com sucesso.");
       router.refresh();
       return;
     }
@@ -297,7 +297,7 @@ export default function OrcamentoForm({
           return;
         }
 
-        toast.success("Atendimento encerrado com cancelamento do orcamento.");
+        toast.success("Atendimento encerrado com cancelamento do orçamento.");
         router.push("/atendimentos");
         return;
       }
@@ -327,27 +327,27 @@ export default function OrcamentoForm({
       return;
     }
 
-    toast.success("Orcamento aprovado. Atendimento enviado para reserva.");
+    toast.success("Orçamento aprovado. Atendimento enviado para reserva.");
     router.push(`/atendimentos/${atendimentoId}/reserva`);
   }
 
   const tituloConfirmacao: Record<AcaoSensivel, string> = {
-    salvar: "Salvar orcamento",
+    salvar: "Salvar orçamento",
     limpar: "Limpar campos",
-    cancelarOrcamento: "Cancelar orcamento",
+    cancelarOrcamento: "Cancelar orçamento",
     encerrarAtendimento: "Encerrar atendimento",
     irReserva: "Ir para reserva",
   };
 
   const descricaoConfirmacao: Record<AcaoSensivel, string> = {
-    salvar: "Deseja salvar os dados de orcamento informados?",
-    limpar: "Deseja limpar os campos do formulario de orcamento?",
+    salvar: "Deseja salvar os dados de orçamento informados?",
+    limpar: "Deseja limpar os campos do formulário de orçamento?",
     cancelarOrcamento:
-      "Deseja cancelar este orcamento? A etapa sera encerrada e o historico sera mantido.",
+      "Deseja cancelar este orçamento? A etapa será encerrada e o histórico será mantido.",
     encerrarAtendimento:
-      "Deseja encerrar o atendimento nesta etapa? Esta acao nao remove registros historicos.",
+      "Deseja encerrar o atendimento nesta etapa? Esta ação não remove registros históricos.",
     irReserva:
-      "Deseja confirmar o orcamento e avancar para a etapa de reserva?",
+      "Deseja confirmar o orçamento e avançar para a etapa de reserva?",
   };
 
   return (
@@ -357,7 +357,7 @@ export default function OrcamentoForm({
           <Card>
             <CardHeader className="space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <CardTitle>Orcamento</CardTitle>
+                <CardTitle>Orçamento</CardTitle>
                 {orcamentoSalvo && !modoEdicao ? (
                   <Button
                     type="button"
@@ -457,7 +457,7 @@ export default function OrcamentoForm({
                 name="observacoes"
                 render={({ field }) => (
                   <FormItem className="md:col-span-2">
-                    <FormLabel>Observacoes</FormLabel>
+                    <FormLabel>Observações</FormLabel>
                     <FormControl>
                       <Textarea
                         value={field.value ?? ""}
@@ -475,7 +475,7 @@ export default function OrcamentoForm({
 
           <Card>
             <CardHeader>
-              <CardTitle>Veiculos previstos</CardTitle>
+              <CardTitle>Veículos previstos</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {fields.map((item, indice) => (
@@ -488,7 +488,7 @@ export default function OrcamentoForm({
                     name={`veiculosPrevistos.${indice}.tipo`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Tipo de veiculo</FormLabel>
+                        <FormLabel>Tipo de veículo</FormLabel>
                         <FormControl>
                           <Select
                             value={field.value}
@@ -560,7 +560,7 @@ export default function OrcamentoForm({
                 onClick={() => append({ tipo: "VAN", quantidade: 1 })}
                 disabled={bloqueado}
               >
-                + Adicionar veiculo
+                + Adicionar veículo
               </Button>
             </CardContent>
           </Card>
@@ -587,7 +587,7 @@ export default function OrcamentoForm({
               onClick={() => abrirConfirmacao("cancelarOrcamento")}
               disabled={emAcao || !orcamentoSalvo}
             >
-              Cancelar orcamento
+              Cancelar orçamento
             </Button>
             <Button
               type="button"
@@ -599,7 +599,7 @@ export default function OrcamentoForm({
             </Button>
             <Button type="button" variant="outline" asChild>
               <Link href={`/atendimentos/${atendimentoId}/solicitacao`}>
-                Voltar para solicitacao
+                Voltar para solicitação
               </Link>
             </Button>
             <Button

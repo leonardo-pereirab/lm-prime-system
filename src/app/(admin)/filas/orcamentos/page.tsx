@@ -35,7 +35,7 @@ function calcularContagemValidade(validoAte?: Date): {
 } {
   if (!validoAte) {
     return {
-      texto: "Aguardando registro de orcamento",
+      texto: "Aguardando registro de orçamento",
       tom: "info",
     };
   }
@@ -44,13 +44,13 @@ function calcularContagemValidade(validoAte?: Date): {
   const diferencaMs = validoAte.getTime() - agora.getTime();
 
   if (diferencaMs <= 0) {
-    return { texto: "Orcamento vencido", tom: "danger" };
+    return { texto: "Orçamento vencido", tom: "danger" };
   }
 
   const diasRestantes = Math.ceil(diferencaMs / (1000 * 60 * 60 * 24));
 
   if (diasRestantes <= 1) {
-    return { texto: "Vence em ate 1 dia", tom: "danger" };
+    return { texto: "Vence em até 1 dia", tom: "danger" };
   }
 
   if (diasRestantes <= 3) {
@@ -65,7 +65,7 @@ export default async function FilaOrcamentosPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Fila de orcamentos">
+      <PageHeader title="Fila de orçamentos">
         <p className="mt-2 text-sm text-muted-foreground">
           Priorize registros pendentes e acompanhe orcamentos proximos do
           vencimento.
@@ -92,7 +92,7 @@ export default async function FilaOrcamentosPage() {
               status={item.status}
               descricaoPrincipal={
                 item.orcamento?.validoAte
-                  ? `Valido ate ${formatarDataHora(item.orcamento.validoAte)}`
+                  ? `Válido até ${formatarDataHora(item.orcamento.validoAte)}`
                   : "Sem validade definida"
               }
               contagem={calcularContagemValidade(item.orcamento?.validoAte)}
